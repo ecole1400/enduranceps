@@ -1,0 +1,3442 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Endurance EPS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap">
+<style>
+  :root{
+    --bg:#f2f4ef;
+    --surface:#ffffff;
+    --surface-2:#eaeee4;
+    --surface-3:#e1e6d9;
+    --border:#d7ddcd;
+    --text:#111710;
+    --text-dim:#5c6459;
+    --text-faint:#8b9284;
+    --accent:#16a34a;
+    --accent-strong:#0f7a37;
+    --accent-soft:#dff3e4;
+    --accent-2:#2563eb;
+    --danger:#dc2626;
+    --danger-soft:#fde3e1;
+    --warn:#ca8a04;
+    --warn-soft:#fdf1d6;
+    --lap:#eab308; --lap-text:#2b1e00;
+    --run-0:#3b82f6; --run-0-soft:#dbe8fe;
+    --run-1:#c2410c; --run-1-soft:#fbe3d4;
+    --run-2:#7c3aed; --run-2-soft:#ece3fd;
+    --r0:#dc2626; --r1:#ea580c; --r2:#ca8a04; --r3:#65a30d; --r4:#0d9488;
+    --shadow: 0 1px 2px rgba(20,30,15,.06), 0 8px 24px -12px rgba(20,30,15,.18);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0a0e17; --surface:#121a2b; --surface-2:#182238; --surface-3:#202c47; --border:#28324a;
+      --text:#eef1f6; --text-dim:#96a0b8; --text-faint:#69738c;
+      --accent:#4ade80; --accent-strong:#7ef0a3; --accent-soft:rgba(74,222,128,.16); --accent-2:#60a5fa;
+      --danger:#f87171; --danger-soft:rgba(248,113,113,.16);
+      --warn:#f0c750; --warn-soft:rgba(240,199,80,.16);
+      --lap:#eab308; --lap-text:#2b1e00;
+      --run-0:#3b82f6; --run-0-soft:rgba(59,130,246,.2);
+      --run-1:#c2410c; --run-1-soft:rgba(194,65,12,.24);
+      --run-2:#7c3aed; --run-2-soft:rgba(124,58,237,.22);
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 30px -14px rgba(0,0,0,.55);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0a0e17; --surface:#121a2b; --surface-2:#182238; --surface-3:#202c47; --border:#28324a;
+    --text:#eef1f6; --text-dim:#96a0b8; --text-faint:#69738c;
+    --accent:#4ade80; --accent-strong:#7ef0a3; --accent-soft:rgba(74,222,128,.16); --accent-2:#60a5fa;
+    --danger:#f87171; --danger-soft:rgba(248,113,113,.16);
+    --warn:#f0c750; --warn-soft:rgba(240,199,80,.16);
+    --lap:#eab308; --lap-text:#2b1e00;
+    --run-0:#3b82f6; --run-0-soft:rgba(59,130,246,.2);
+    --run-1:#c2410c; --run-1-soft:rgba(194,65,12,.24);
+    --run-2:#7c3aed; --run-2-soft:rgba(124,58,237,.22);
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 30px -14px rgba(0,0,0,.55);
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box;}
+  [hidden]{ display:none !important; }
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:"Manrope",system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+  .wrap{ max-width:1080px; margin:0 auto; padding:24px 16px 72px; }
+  @media (min-width:720px){ .wrap{ padding:36px 32px 88px; } }
+
+  .eyebrow{ font-family:"Unbounded",sans-serif; font-weight:700; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent-strong); background:transparent; border:none; }
+  header.top{ display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:12px; }
+  .title-block h1{ font-family:"Unbounded",sans-serif; font-weight:800; font-size:clamp(2.3rem, 7vw, 3.8rem); line-height:.95; margin:2px 0 0; letter-spacing:-.01em; text-wrap:balance; }
+  .meta{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding-top:6px; }
+  .meta .date{ font-family:"JetBrains Mono",monospace; font-size:13px; color:var(--text-dim); white-space:nowrap; }
+  .icon-btn{ width:38px; height:38px; display:inline-flex; align-items:center; justify-content:center; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--text-dim); cursor:pointer; transition:transform .12s ease, color .12s ease, border-color .12s ease; }
+  .icon-btn:hover{ color:var(--text); border-color:var(--text-faint); }
+  .icon-btn:active{ transform:scale(.94); }
+  .icon-btn svg{ width:17px; height:17px; }
+  button, [contenteditable], input, select, textarea{ font-family:inherit; }
+  .icon-btn:focus-visible, button:focus-visible, [contenteditable]:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{ outline:2px solid var(--accent-2); outline-offset:2px; }
+
+  .sync-banner{ display:flex; align-items:center; gap:8px; font-size:12px; color:var(--warn); background:var(--warn-soft); border:1px solid var(--warn); border-radius:10px; padding:8px 12px; margin-bottom:14px; }
+  .sync-banner svg{ width:14px; height:14px; flex:none; }
+  .sync-ok{ display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--accent-strong); }
+  .sync-ok .dot{ width:7px; height:7px; border-radius:50%; background:var(--accent); }
+
+  .tabs-row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .tabs{ display:inline-flex; gap:6px; padding:4px; background:var(--surface-2); border:1px solid var(--border); border-radius:12px; flex-wrap:wrap; }
+  .tab{ font-weight:700; font-size:13px; letter-spacing:.02em; padding:8px 16px; border-radius:9px; border:none; background:transparent; color:var(--text-dim); cursor:pointer; transition:background .15s ease, color .15s ease; }
+  .tab.active{ background:var(--accent); color:#06210f; }
+  .tab:not(.active):hover{ color:var(--text); }
+  .add-group-btn{ width:34px; height:34px; border-radius:10px; border:1px dashed var(--border); background:var(--surface); color:var(--text-dim); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; }
+  .add-group-btn:hover{ color:var(--accent-strong); border-color:var(--accent-strong); }
+  .add-group-btn svg{ width:16px; height:16px; }
+
+  .course-cta{
+    display:flex; align-items:center; justify-content:center; gap:12px; width:100%;
+    height:64px; margin-bottom:18px; border:none; border-radius:16px; cursor:pointer;
+    background:linear-gradient(135deg, var(--accent-2), #1d4ed8); color:#fff;
+    font-family:"Unbounded",sans-serif; font-weight:700; font-size:clamp(15px,2.4vw,18px); letter-spacing:.02em;
+    box-shadow:0 8px 22px -8px rgba(37,99,235,.55);
+    transition:filter .12s ease, transform .08s ease;
+  }
+  .course-cta:hover{ filter:brightness(1.08); }
+  .course-cta:active{ transform:scale(.99); }
+  .course-cta svg{ width:26px; height:26px; flex:none; }
+  .objective{ display:flex; flex-wrap:wrap; align-items:center; gap:14px; justify-content:space-between; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 18px; margin-bottom:20px; box-shadow:var(--shadow); }
+  .objective-text{ display:flex; flex-direction:column; gap:3px; flex:1 1 auto; min-width:0; }
+  .objective-label{ font-family:"Unbounded",sans-serif; font-weight:700; font-size:10.5px; letter-spacing:.13em; color:var(--text-faint); white-space:nowrap; }
+  .objective-name-input{ font-weight:700; font-size:16px; border:none; background:transparent; color:var(--text); padding:1px 2px; margin:-1px -2px; border-radius:4px; width:100%; max-width:420px; }
+  .objective-name-input:hover{ background:var(--surface-2); cursor:text; }
+  .objective-detail{ font-size:12.5px; color:var(--text-faint); }
+  .pill{ font-family:"JetBrains Mono",monospace; font-size:12.5px; font-weight:600; padding:7px 13px; border-radius:999px; background:var(--surface-2); color:var(--text-dim); border:1px solid var(--border); white-space:nowrap; cursor:pointer; }
+  .pill:hover{ border-color:var(--text-faint); color:var(--text); }
+  .pill.set{ background:var(--accent-soft); color:var(--accent-strong); border-color:transparent; }
+
+  .panel{ background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:18px; margin-bottom:20px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:16px; }
+  .panel h2{ font-family:"Unbounded",sans-serif; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; margin:0; color:var(--text-dim); }
+  .panel .hint{ font-size:12px; color:var(--text-faint); margin:-8px 0 0; }
+  .field-row{ display:flex; flex-wrap:wrap; gap:12px; }
+  .field{ display:flex; flex-direction:column; gap:6px; flex:1 1 140px; }
+  .field label{ font-size:11px; font-weight:700; color:var(--text-faint); letter-spacing:.03em; }
+  .field input, .field select, .field textarea{ font-size:13.5px; padding:9px 11px; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--text); }
+  .field input.mono{ font-family:"JetBrains Mono",monospace; }
+  .field textarea{ resize:vertical; min-height:64px; }
+  .settings-actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .btn{ font-weight:700; font-size:13px; padding:9px 16px; border-radius:9px; border:1px solid var(--border); background:var(--surface-2); color:var(--text); cursor:pointer; }
+  .btn:hover{ border-color:var(--text-faint); }
+  .btn.primary{ background:var(--accent); color:#06210f; border-color:transparent; }
+  .btn.danger{ color:var(--danger); }
+  .btn:disabled{ opacity:.5; cursor:not-allowed; }
+
+  .roster-chip-list{ display:flex; flex-wrap:wrap; gap:8px; }
+  .roster-chip{ display:flex; align-items:center; gap:6px; padding:6px 6px 6px 12px; border-radius:999px; border:1px solid var(--border); background:var(--surface-2); font-size:12.5px; font-weight:600; }
+  .roster-chip.assigned{ opacity:.55; }
+  .roster-chip .rm{ width:20px; height:20px; border-radius:50%; border:none; background:transparent; color:var(--text-faint); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; }
+  .roster-chip .rm:hover{ color:var(--danger); background:var(--danger-soft); }
+  .roster-chip .rm svg{ width:10px; height:10px; }
+
+  .picker-card{ background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:18px; box-shadow:var(--shadow); }
+  .picker-title{ font-family:"Unbounded",sans-serif; font-weight:700; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint); margin-bottom:4px; }
+  .picker-hint{ font-size:12.5px; color:var(--text-faint); margin-bottom:12px; }
+  .name-pool{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+  .name-chip{ position:relative; padding:9px 16px; border-radius:999px; border:2px solid var(--border); background:var(--surface-2); font-weight:700; font-size:14px; cursor:pointer; transition:border-color .12s ease, background .12s ease, transform .08s ease; }
+  .name-chip:hover{ border-color:var(--text-faint); }
+  .name-chip:active{ transform:scale(.97); }
+  .name-chip.selected{ border-color:var(--accent); background:var(--accent-soft); color:var(--accent-strong); }
+  .name-chip .order-badge{ position:absolute; top:-8px; right:-8px; width:19px; height:19px; border-radius:50%; background:var(--accent); color:#06210f; font-family:"JetBrains Mono",monospace; font-size:11px; display:flex; align-items:center; justify-content:center; }
+  .pool-empty{ font-size:13px; color:var(--text-faint); padding:8px 0; }
+  .picker-bar{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding-top:10px; border-top:1px solid var(--border); }
+  .picker-bar .sel-text{ font-size:12.5px; color:var(--text-dim); flex:1 1 auto; min-width:160px; }
+
+  .team-list{ display:flex; flex-direction:column; gap:16px; }
+  .team-card{ background:var(--surface); border:1px solid var(--border); border-radius:16px; overflow:hidden; box-shadow:var(--shadow); }
+  .team-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:14px 16px 10px; }
+  .team-title{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .team-num{ font-family:"Unbounded",sans-serif; font-weight:800; font-size:11px; letter-spacing:.08em; color:var(--text-faint); }
+  .chip-row{ display:flex; gap:8px; flex-wrap:wrap; }
+  .chip{ display:flex; align-items:center; gap:7px; padding:6px 12px 6px 8px; border-radius:999px; border:1.5px solid var(--border); background:var(--surface-2); font-weight:700; font-size:13px; transition:border-color .15s ease, background .15s ease; }
+  .chip .role-dot{ width:9px; height:9px; border-radius:50%; flex:none; }
+  .chip.running{ border-color:var(--accent); background:var(--accent-soft); }
+  .chip.running .role-badge{ color:var(--accent-strong); }
+  .role-badge{ font-family:"Unbounded",sans-serif; font-size:9px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint); }
+  button.chip{ font-family:inherit; cursor:pointer; }
+  .chip.selectable:not(.running):hover{ border-color:var(--text-faint); }
+  .chip.selectable:active{ transform:scale(.97); }
+  .runner-hint{ font-size:11px; color:var(--text-faint); flex-basis:100%; margin-top:-2px; }
+  .team-tools{ display:flex; gap:4px; }
+  .ghost-btn{ width:26px; height:26px; border-radius:7px; border:none; background:transparent; color:var(--text-faint); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; }
+  .ghost-btn:hover{ color:var(--text); background:var(--surface-2); }
+  .ghost-btn svg{ width:13px; height:13px; }
+
+  .progress-line{ padding:0 16px; font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--text-faint); }
+
+  .big-btn-wrap{ padding:14px 16px 16px; }
+  .big-btn{
+    width:100%; display:flex; align-items:center; justify-content:center; gap:14px;
+    height:76px; border-radius:16px; border:none; cursor:pointer;
+    background:var(--accent); color:#06210f;
+    font-family:"Unbounded",sans-serif; font-weight:700; font-size:16px; letter-spacing:.02em;
+    box-shadow:0 6px 18px -6px rgba(22,163,74,.5);
+    transition:filter .1s ease, transform .08s ease, background .15s ease;
+  }
+  .big-btn:hover{ filter:brightness(1.05); }
+  .big-btn:active{ transform:scale(.99); }
+  .big-btn.running{ background:var(--danger); color:#2b0605; box-shadow:0 6px 18px -6px rgba(220,38,38,.5); }
+  .big-btn.done{ background:var(--surface-2); color:var(--text-faint); box-shadow:none; cursor:default; }
+  .big-btn .icon{ width:26px; height:26px; flex:none; }
+  .big-btn .live-time{ font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; font-size:22px; }
+
+
+  .eval-readout{ display:flex; flex-wrap:wrap; gap:18px; padding:2px 16px 10px; align-items:baseline; }
+  .eval-readout .lbl{ font-size:10.5px; font-weight:700; color:var(--text-faint); text-transform:uppercase; letter-spacing:.06em; margin-right:6px; }
+  .eval-readout .val{ font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; font-weight:800; font-size:20px; }
+  /* La distance est le chiffre que l'observateur·rice doit pouvoir lire d'un
+     coup d'œil sans ambiguïté (il/elle regarde surtout le coureur) — on
+     l'agrandit nettement par rapport aux autres compteurs, et elle "flashe"
+     brièvement en jaune (même couleur que le bouton passage) juste après
+     chaque passage enregistré, comme confirmation visuelle du clic. */
+  .eval-readout .val.distance-val{ font-size:clamp(26px,5.5vw,36px); }
+  .focus-half .eval-readout .val.distance-val{ font-size:clamp(32px,8vw,50px); }
+  @keyframes lapFlashPulse{
+    0%{ background-color:var(--lap); color:var(--lap-text); border-radius:8px; box-shadow:0 0 0 0 rgba(234,179,8,.55); }
+    70%{ background-color:var(--lap); color:var(--lap-text); border-radius:8px; box-shadow:0 0 0 14px rgba(234,179,8,0); }
+    100%{ background-color:transparent; box-shadow:0 0 0 0 rgba(234,179,8,0); }
+  }
+  .lap-flash{ animation: lapFlashPulse .8s ease-out; padding:0 6px; margin:0 -6px; }
+  .eval-progress-track{ margin:0 16px 12px; height:14px; border-radius:999px; background:var(--surface-2); border:1px solid var(--border); overflow:hidden; }
+  .eval-progress-fill{ height:100%; background:linear-gradient(90deg, var(--accent), var(--accent-strong)); transition:width .25s ease; }
+  /* Bouton "passage" volontairement JAUNE (et non bleu ou rouge) : c'est
+     l'action la plus fréquente et la plus critique du test (l'observateur·rice
+     la déclenche à chaque tour du coureur), donc une couleur qui lui est
+     propre, bien distincte du rouge réservé aux actions d'annulation. */
+  .lap-btn{ width:100%; display:flex; align-items:center; justify-content:center; gap:12px; height:84px; border-radius:16px; border:none; cursor:pointer; background:var(--lap); color:var(--lap-text); font-family:"Unbounded",sans-serif; font-weight:800; font-size:clamp(15px,3vw,19px); box-shadow:0 8px 22px -8px rgba(234,179,8,.6); }
+  .lap-btn:hover{ filter:brightness(1.06); }
+  .lap-btn:active{ transform:scale(.98); }
+
+  /* Boutons d'action secondaires (Annuler / Reprendre / Arrêter / Recommencer) —
+     volontairement grands, colorés et bien espacés du bouton principal :
+     ce sont des élèves qui les ont sous les doigts en plein effort, pas
+     seulement l'enseignant·e, donc pas question d'un petit lien texte
+     discret qu'on touche par erreur en visant le gros bouton au-dessus. */
+  .action-btn{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    width:100%; min-height:52px; margin-top:12px;
+    padding:12px 18px; border-radius:14px;
+    font-family:"Unbounded",sans-serif; font-weight:700; font-size:clamp(13px,2.6vw,15px);
+    cursor:pointer; border:2px solid transparent; text-align:center; line-height:1.25;
+  }
+  .action-btn:hover{ filter:brightness(0.97); }
+  .action-btn:active{ transform:scale(.98); }
+  .action-btn.danger{ background:var(--danger-soft); border-color:var(--danger); color:var(--danger); }
+  .action-btn.warn{ background:var(--warn-soft); border-color:var(--warn); color:var(--warn); }
+  .action-btn.neutral{ background:rgba(37,99,235,.1); border-color:var(--accent-2); color:var(--accent-2); }
+  .focus-half .action-btn{ max-width:560px; }
+
+  .tours-stepper{ display:inline-flex; align-items:center; gap:8px; margin-top:4px; }
+  .tours-stepper .tstep-btn{ width:26px; height:26px; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--text-dim); font-weight:800; font-size:15px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; line-height:1; }
+  .tours-stepper .tstep-btn:hover{ border-color:var(--text-faint); color:var(--text); }
+  .tours-stepper .tstep-val{ font-family:"JetBrains Mono",monospace; font-weight:700; font-size:13px; color:var(--text-dim); min-width:64px; text-align:center; }
+
+  .ressenti-prompt{ margin:0 16px 14px; padding:12px 14px; border-radius:12px; background:var(--accent-soft); border:1px dashed var(--accent-strong); display:flex; flex-direction:column; gap:10px; }
+  .ressenti-prompt .q{ font-weight:700; font-size:13.5px; }
+  .ressenti-options{ display:flex; gap:8px; flex-wrap:wrap; }
+  .ressenti-btn{ display:flex; flex-direction:column; align-items:center; gap:3px; padding:8px 10px; border-radius:11px; border:1.5px solid var(--border); background:var(--surface); cursor:pointer; min-width:64px; }
+  .ressenti-btn .em{ font-size:20px; }
+  .ressenti-btn .lbl{ font-size:10px; font-weight:700; color:var(--text-dim); text-align:center; line-height:1.2; }
+  .ressenti-btn:hover{ border-color:var(--text-faint); }
+  .ressenti-btn.active{ border-color:var(--rcolor); background:var(--rcolor-soft); }
+
+  .detail-toggle{ width:100%; border:none; background:var(--surface-2); color:var(--text-dim); font-weight:700; font-size:12px; letter-spacing:.03em; padding:10px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; border-top:1px solid var(--border); }
+  .detail-toggle:hover{ color:var(--text); }
+  .detail-toggle svg{ width:12px; height:12px; transition:transform .15s ease; }
+  .detail-toggle.open svg{ transform:rotate(180deg); }
+  .detail{ padding:16px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:18px; }
+
+  .table-scroll{ overflow-x:auto; border:1px solid var(--border); border-radius:12px; }
+  table.tours{ border-collapse:collapse; width:100%; min-width:560px; font-size:13px; }
+  table.tours th, table.tours td{ padding:8px 10px; text-align:left; border-bottom:1px solid var(--border); white-space:nowrap; }
+  table.tours th{ font-family:"Unbounded",sans-serif; font-size:9.5px; letter-spacing:.07em; text-transform:uppercase; color:var(--text-faint); background:var(--surface-2); }
+  table.tours td.num{ font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
+  table.tours tr:last-child td{ border-bottom:none; }
+  table.tours td.empty{ color:var(--text-faint); }
+  .runner-tag{ display:inline-flex; align-items:center; gap:6px; font-weight:700; }
+  .runner-tag .dot{ width:8px; height:8px; border-radius:50%; }
+  .reg-tag{ padding:3px 8px; border-radius:999px; font-size:11px; font-weight:700; }
+  .reg-good{ background:var(--accent-soft); color:var(--accent-strong); }
+  .reg-mid{ background:var(--warn-soft); color:#a06a02; }
+  .reg-bad{ background:var(--danger-soft); color:var(--danger); }
+  .met-target{ color:var(--accent-strong); font-weight:700; }
+  .edit-time-btn{ background:none; border:none; padding:0; font:inherit; cursor:pointer; color:inherit; text-decoration:underline dotted; text-underline-offset:2px; }
+  .edit-time-btn:hover{ color:var(--accent-2); }
+  .time-edit-row{ display:inline-flex; gap:4px; align-items:center; justify-content:flex-end; }
+  .time-edit-input{ width:70px; padding:3px 6px; border-radius:6px; border:1px solid var(--accent-2); background:var(--surface); color:var(--text); font-size:12px; }
+  .time-edit-row .ghost-btn{ width:22px; height:22px; }
+  .time-edit-row .ghost-btn svg{ width:12px; height:12px; }
+  td.ressenti-td button{ background:none; border:none; font-size:15px; cursor:pointer; padding:2px; opacity:.5; filter:grayscale(.5); }
+  td.ressenti-td button.active{ opacity:1; filter:none; }
+
+  .chart-box{ display:flex; flex-direction:column; gap:8px; }
+  .chart-title{ font-size:11.5px; font-weight:700; color:var(--text-faint); letter-spacing:.04em; text-transform:uppercase; }
+  .chart-empty{ font-size:13px; color:var(--text-faint); padding:24px 0; text-align:center; }
+  svg.chart text{ font-family:"JetBrains Mono",monospace; fill:var(--text-faint); }
+  svg.chart .grid-line{ stroke:var(--border); stroke-width:1; }
+  svg.chart .axis-line{ stroke:var(--text-faint); stroke-width:1; }
+
+  footer.legend{ display:flex; flex-wrap:wrap; gap:16px; margin-top:8px; font-size:12px; color:var(--text-faint); }
+  footer.legend .item{ display:flex; align-items:center; gap:6px; }
+  footer.legend .swatch{ width:9px; height:9px; border-radius:999px; }
+
+  .empty-state{ background:var(--surface); border:1px dashed var(--border); border-radius:14px; padding:24px; text-align:center; color:var(--text-faint); font-size:13.5px; }
+
+  .toast{ position:fixed; left:50%; bottom:22px; transform:translate(-50%,10px); background:var(--text); color:var(--bg); padding:10px 18px; border-radius:999px; font-size:13px; font-weight:700; opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; z-index:200; max-width:90vw; text-align:center; }
+  .toast.show{ opacity:1; transform:translate(-50%,0); }
+
+  /* ---- focus / split-screen "course" mode ---- */
+  .focus-overlay{ position:fixed; inset:0; background:var(--bg); z-index:90; display:flex; flex-direction:column; }
+  .focus-topbar{ display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-bottom:1px solid var(--border); flex:none; }
+  .focus-topbar .ftitle{ font-family:"Unbounded",sans-serif; font-weight:700; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint); }
+  .focus-exit-btn{ font-size:12px; font-weight:700; padding:7px 14px; border-radius:8px; border:1px solid var(--border); background:var(--surface); color:var(--text-dim); cursor:pointer; }
+  .focus-exit-btn:hover{ color:var(--danger); border-color:var(--danger); }
+  .focus-setup{ padding:20px 16px 40px; max-width:640px; margin:0 auto; width:100%; overflow-y:auto; flex:1; }
+  .focus-setup .picker-title{ margin-top:18px; }
+  .focus-group-block{ margin-bottom:18px; }
+  .focus-group-name{ font-family:"Unbounded",sans-serif; font-weight:700; font-size:11px; letter-spacing:.07em; text-transform:uppercase; color:var(--text-faint); margin-bottom:8px; }
+  .focus-team-row{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:10px 12px; border:2px solid var(--border); border-radius:12px; background:var(--surface); cursor:pointer; margin-bottom:8px; }
+  .focus-team-row:hover{ border-color:var(--text-faint); }
+  .focus-team-row.selected{ border-color:var(--accent); background:var(--accent-soft); }
+  .focus-team-row .fnum{ font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--text-faint); width:20px; flex:none; }
+  .focus-split{ flex:1; display:flex; min-height:0; }
+  @media (max-width:760px){ .focus-split{ flex-direction:column; } }
+  .focus-split.face-to-face{ flex-direction:column; }
+  .focus-half{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; padding:24px; position:relative; min-width:0; min-height:0; }
+  .focus-half + .focus-half{ border-left:2px solid var(--border); }
+  @media (max-width:760px){ .focus-half + .focus-half{ border-left:none; border-top:2px solid var(--border); } }
+  .focus-split.face-to-face .focus-half + .focus-half{ border-left:none; border-top:2px solid var(--border); }
+  .focus-half.flipped{ transform:rotate(180deg); }
+  .focus-toggle-row{ display:flex; align-items:center; gap:12px; padding:12px 14px; border:2px solid var(--border); border-radius:12px; background:var(--surface); cursor:pointer; margin-top:18px; }
+  .focus-toggle-row:hover{ border-color:var(--text-faint); }
+  .focus-toggle-row.on{ border-color:var(--accent); background:var(--accent-soft); }
+  .focus-toggle-row .ftxt{ flex:1; min-width:0; }
+  .focus-toggle-row .ftxt .t1{ font-weight:700; font-size:13.5px; }
+  .focus-toggle-row .ftxt .t2{ font-size:12px; color:var(--text-faint); margin-top:2px; }
+  .focus-switch{ width:38px; height:22px; border-radius:999px; background:var(--surface-2); border:1px solid var(--border); position:relative; flex:none; transition:background .15s ease; }
+  .focus-switch .knob{ position:absolute; top:1px; left:1px; width:18px; height:18px; border-radius:50%; background:var(--surface); box-shadow:0 1px 2px rgba(0,0,0,.25); transition:transform .15s ease; }
+  .focus-toggle-row.on .focus-switch{ background:var(--accent); }
+  .focus-toggle-row.on .focus-switch .knob{ transform:translateX(16px); }
+  .focus-flip-btn{ width:32px; height:32px; border-radius:8px; border:1px solid var(--border); background:var(--surface); color:var(--text-dim); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; }
+  .focus-flip-btn:hover{ color:var(--text); border-color:var(--text-faint); }
+  .focus-flip-btn svg{ width:15px; height:15px; }
+  .focus-names{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+  .focus-chip{ display:flex; align-items:center; gap:8px; padding:8px 16px; border-radius:999px; border:2px solid var(--border); background:var(--surface); font-weight:800; font-size:clamp(1rem,2.6vw,1.3rem); }
+  .focus-chip.running{ border-color:var(--accent); background:var(--accent-soft); }
+  .focus-chip .role-dot{ width:11px; height:11px; border-radius:50%; }
+  button.focus-chip{ font-family:inherit; cursor:pointer; }
+  .focus-chip.selectable:not(.running):hover{ border-color:var(--text-faint); }
+  .focus-chip.selectable:active{ transform:scale(.97); }
+  .focus-progress{ font-family:"JetBrains Mono",monospace; font-size:clamp(.85rem,2vw,1rem); color:var(--text-faint); }
+  .focus-bigbtn{
+    width:100%; max-width:560px; min-height:min(32vh,240px);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+    border-radius:24px; border:none; cursor:pointer; background:var(--accent); color:#06210f;
+    font-family:"Unbounded",sans-serif; font-weight:800; font-size:clamp(1.1rem,3vw,1.6rem); text-align:center; padding:20px;
+    box-shadow:0 10px 30px -10px rgba(22,163,74,.5);
+  }
+  .focus-bigbtn:active{ transform:scale(.99); }
+  .focus-bigbtn.running{ background:var(--danger); color:#2b0605; box-shadow:0 10px 30px -10px rgba(220,38,38,.5); }
+  /* Gros bouton "passage" en mode course (test 12'/3000 m) : jaune, jamais
+     rouge — le rouge y signifierait "arrêter", alors qu'ici c'est l'action
+     répétée de pointage à chaque tour du coureur. */
+  .focus-bigbtn.lap{ background:var(--lap); color:var(--lap-text); box-shadow:0 10px 30px -10px rgba(234,179,8,.6); }
+  .focus-bigbtn.done{ background:var(--surface-2); color:var(--text-faint); box-shadow:none; cursor:default; }
+  .focus-bigbtn .icon{ width:clamp(28px,5vw,44px); height:clamp(28px,5vw,44px); }
+  .focus-bigbtn .flive{ font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; font-size:clamp(1.6rem,6vw,2.6rem); }
+  .focus-ressenti{ width:100%; max-width:560px; padding:16px; border-radius:16px; background:var(--accent-soft); border:1px dashed var(--accent-strong); display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .focus-ressenti .q{ font-weight:700; font-size:clamp(.95rem,2.4vw,1.15rem); text-align:center; }
+  .focus-ressenti-opts{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+  .focus-ressenti-opts .ressenti-btn{ min-width:72px; padding:10px 12px; }
+  .focus-ressenti-opts .em{ font-size:26px; }
+  .focus-empty{ padding:40px; text-align:center; color:var(--text-faint); }
+
+  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; animation:none !important; } }
+
+  @media print{
+    .no-print{ display:none !important; }
+    body{ background:#fff; color:#000; }
+    .team-card{ box-shadow:none; border-color:#ccc; break-inside:avoid; }
+    .detail{ display:flex !important; }
+    .detail-toggle{ display:none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="dashboard">
+
+  <header class="top">
+    <div class="title-block">
+      <input class="eyebrow" id="classLabel" spellcheck="false" style="border:none; background:transparent; padding:0; width:auto;">
+      <h1>Endurance</h1>
+    </div>
+    <div class="meta">
+      <span class="date" id="dateLabel"></span>
+      <button class="icon-btn no-print" data-action="open-focus" title="Mode course (plein écran par équipe)" aria-label="Mode course">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="8" height="16" rx="1.5"/><rect x="13" y="4" width="8" height="16" rx="1.5"/></svg>
+      </button>
+      <button class="icon-btn no-print" data-action="toggle-theme" title="Basculer le thème" aria-label="Basculer le thème clair/sombre">
+        <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></svg>
+      </button>
+      <button class="icon-btn no-print" data-action="toggle-settings" title="Réglages" aria-label="Réglages">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+      </button>
+      <button class="icon-btn no-print" data-action="print" title="Imprimer" aria-label="Imprimer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="sync-banner no-print" id="syncBanner" hidden>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+    <span>Mode hors-ligne : les données restent sur cet appareil et ne se synchronisent pas avec les autres iPads.</span>
+  </div>
+
+  <div class="tabs-row no-print">
+    <div class="tabs" id="tabs" role="tablist"></div>
+    <button class="add-group-btn" data-action="add-group" title="Ajouter un groupe" aria-label="Ajouter un groupe">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+    <span class="sync-ok no-print" id="syncOk" hidden><span class="dot"></span>Synchronisé</span>
+  </div>
+
+  <button class="course-cta no-print" data-action="open-focus" title="Mode course (plein écran par équipe)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="8" height="16" rx="1.5"/><rect x="13" y="4" width="8" height="16" rx="1.5"/></svg>
+    <span>Mode course (plein écran)</span>
+  </button>
+
+  <div class="objective">
+    <div class="objective-text">
+      <span class="objective-label">Objectif</span>
+      <input class="objective-name-input" id="objName" spellcheck="false">
+      <span class="objective-detail" id="objSummary"></span>
+      <div class="tours-stepper no-print" id="toursStepperWrap">
+        <button class="tstep-btn" type="button" data-action="tours-dec" title="Un tour de moins" aria-label="Un tour de moins">−</button>
+        <span class="tstep-val" id="toursVal"></span>
+        <button class="tstep-btn" type="button" data-action="tours-inc" title="Un tour de plus" aria-label="Un tour de plus">+</button>
+      </div>
+    </div>
+    <button class="pill no-print" id="targetPill" data-action="toggle-settings"></button>
+  </div>
+
+  <div class="panel no-print" id="settingsPanel" hidden>
+    <h2>Réglages du groupe affiché : <span id="settingsGroupName"></span></h2>
+    <p class="hint">Chaque groupe (onglet) a sa propre classe, son propre objectif et sa propre liste d'élèves — modifier l'un n'affecte jamais les autres.</p>
+    <div class="field-row">
+      <div class="field" style="flex:1 1 220px;"><label for="fGroupName">Nom du groupe (onglet)</label><input id="fGroupName" type="text"></div>
+      <div class="field"><label for="fClass">Classe / label</label><input id="fClass" type="text"></div>
+      <div class="field"><label for="fDate">Date de la séance</label><input id="fDate" type="date" class="mono"></div>
+    </div>
+    <div class="field-row">
+      <div class="field" style="flex:1 1 220px;">
+        <label for="fMode">Type d'activité</label>
+        <select id="fMode" class="mono">
+          <option value="relais">Relais / rotation par équipes</option>
+          <option value="cooper">Évaluation course de 12 minutes</option>
+          <option value="dist3000">Évaluation 3000 m (temps le plus court)</option>
+        </select>
+      </div>
+      <div class="field" style="flex:1 1 220px;"><label for="fObjName">Nom de l'objectif</label><input id="fObjName" type="text" placeholder="ex. Test Luc Léger, VMA, Cooper…"></div>
+    </div>
+
+    <div id="relaisFieldsWrap">
+      <div class="field-row">
+        <div class="field"><label for="fRoute">Parcours</label><input id="fRoute" type="text" placeholder="ex. la Passerelle"></div>
+        <div class="field"><label for="fDist">Distance d'un tour (m)</label><input id="fDist" type="number" min="1" class="mono"></div>
+        <div class="field"><label for="fTours">Nombre de relais</label><input id="fTours" type="number" min="1" class="mono"></div>
+        <div class="field"><label for="fLapsPerTurn">Tours consécutifs / relais</label><input id="fLapsPerTurn" type="number" min="1" class="mono"></div>
+        <div class="field"><label for="fTarget">Cible / tour (mm:ss)</label><input id="fTarget" type="text" placeholder="ex. 02:30" class="mono"></div>
+      </div>
+      <p class="hint">Ex. pour « 10 × 2 tours » : 10 relais, 2 tours consécutifs par relais — chaque élève enchaîne 2 tours avant de passer le relais à son binôme.</p>
+      <div class="field-row">
+        <div class="field"><label for="fLevel2Tours">Tours niveau 2 (0 = désactivé)</label><input id="fLevel2Tours" type="number" min="0" class="mono"></div>
+        <div class="field"><label for="fLevel2Dist">Distance / tour niveau 2 (m)</label><input id="fLevel2Dist" type="number" min="1" class="mono"></div>
+      </div>
+      <p class="hint">Le niveau 2 ajoute 1 ou 2 tours après les relais normaux, sur une distance de tour différente (parcours plus long/court) — la vitesse est calculée avec cette distance-là uniquement sur ces tours-là.</p>
+    </div>
+
+    <div id="cooperFieldsWrap" hidden>
+      <div class="field-row">
+        <div class="field"><label for="fRouteCooper">Parcours</label><input id="fRouteCooper" type="text" placeholder="ex. la Passerelle"></div>
+        <div class="field"><label for="fDistCooper">Distance d'un tour (m)</label><input id="fDistCooper" type="number" min="1" class="mono"></div>
+      </div>
+      <p class="hint">Évaluation de course de 12 minutes : l'élève observateur coche un passage à chaque tour du coureur. La distance d'un tour dépend du lieu (ex. 130 m en cour, 400 m sur une piste) — réglez-la ici pour ce groupe. Le chronomètre s'arrête automatiquement à 12:00.</p>
+    </div>
+
+    <div id="dist3000FieldsWrap" hidden>
+      <div class="field-row">
+        <div class="field"><label for="fRoute3000">Parcours</label><input id="fRoute3000" type="text" placeholder="ex. la Passerelle"></div>
+        <div class="field"><label for="fDist3000Lap">Distance d'un tour (m)</label><input id="fDist3000Lap" type="number" min="1" class="mono"></div>
+        <div class="field"><label for="fDist3000Target">Distance à atteindre (m)</label><input id="fDist3000Target" type="number" min="1" class="mono"></div>
+      </div>
+      <p class="hint">Évaluation 3000 m : l'élève observateur coche un passage à chaque tour du coureur ; une barre de progression se remplit vers l'objectif. Le chronomètre s'arrête automatiquement dès que la distance cumulée atteint l'objectif.</p>
+    </div>
+
+    <div class="settings-actions">
+      <button class="btn danger" data-action="remove-group">Supprimer ce groupe</button>
+    </div>
+
+    <h2>Prénoms des élèves — <span id="rosterGroupName"></span></h2>
+    <p class="hint">Collez ou tapez une liste de prénoms (un par ligne, ou séparés par des virgules).</p>
+    <div class="field-row" style="align-items:flex-end;">
+      <div class="field" style="flex:1 1 260px;"><textarea id="fBulkNames" placeholder="Salvador&#10;Ajnur&#10;Lilia&#10;..."></textarea></div>
+      <button class="btn primary" data-action="add-names">Ajouter les prénoms</button>
+    </div>
+    <div class="roster-chip-list" id="rosterChips"></div>
+
+    <h2>Séance de ce groupe</h2>
+    <div class="settings-actions">
+      <button class="btn" data-action="new-session">Nouvelle séance (mêmes équipes)</button>
+      <button class="btn" data-action="reshuffle-teams">Reformer les équipes (même liste d'élèves)</button>
+      <button class="btn danger" data-action="archive-restart">Archiver &amp; vider la liste d'élèves</button>
+      <button class="btn danger" data-action="reset-group">Réinitialiser les temps de ce groupe</button>
+    </div>
+    <p class="hint">Ces actions n'affectent que le groupe affiché ci-dessus — les autres groupes (onglets) gardent leurs équipes, leurs temps et leurs réglages. « Reformer les équipes » archive les résultats du jour et garde la liste des prénoms pour recomposer de nouveaux duos ou trios. « Archiver &amp; vider la liste » repart de zéro avec ce groupe (nouvelle liste d'élèves à saisir).</p>
+
+    <h2>Sauvegarder / récupérer les données</h2>
+    <p class="hint">« Sauvegarder » enregistre toutes les données de cet iPad (tous les groupes, toutes les équipes, l'historique des séances) dans un fichier .json que vous pouvez garder (mail, Fichiers, clé USB…) et réimporter plus tard sur cet iPad ou un autre — par exemple après un changement d'appareil, un nettoyage du navigateur, ou pour retrouver une séance passée. « Restaurer » recharge un ou plusieurs de ces fichiers ici, sans jamais effacer ce qui est déjà présent. C'est aussi ce qu'il faut utiliser quand plusieurs iPads ne peuvent pas se connecter à un compte Claude (chacun garde alors ses données en local) : sur chaque iPad, sauvegardez un fichier ; puis, sur un seul appareil, restaurez tous ces fichiers avant de faire l'export Word final.</p>
+    <div class="settings-actions">
+      <button class="btn primary" data-action="export-device-data">💾 Sauvegarder toutes les données (.json)</button>
+      <button class="btn" data-action="trigger-import-device-data">Restaurer une sauvegarde (.json)</button>
+      <input type="file" id="importFileInput" accept="application/json,.json" multiple hidden>
+    </div>
+
+    <h2>Export</h2>
+    <div class="field-row" style="align-items:flex-end;">
+      <div class="field">
+        <label for="fExportSession">Séance à exporter</label>
+        <select id="fExportSession"></select>
+      </div>
+      <button class="btn primary" data-action="export-word" id="exportBtn">Exporter en Word (.docx)</button>
+      <button class="btn" data-action="export-pdf" id="exportPdfBtn">Exporter en PDF (données seules)</button>
+    </div>
+    <p class="hint">Le PDF contient uniquement les tableaux de résultats (temps, distances, vitesses) — pratique pour transmettre les données à un·e collègue sans partager l'outil interactif.</p>
+  </div>
+
+  <div class="picker-card no-print" id="pickerCard">
+    <div class="picker-title" id="pickerTitle">Composer les équipes</div>
+    <div class="picker-hint" id="pickerHint">Cliquez sur 2 prénoms pour former un duo, ou sur 3 pour former un trio (si le groupe est impair).</div>
+    <div class="name-pool" id="namePool"></div>
+    <div class="picker-bar">
+      <span class="sel-text" id="selText">Aucun prénom sélectionné.</span>
+      <button class="btn" data-action="clear-selection">Annuler</button>
+      <button class="btn primary" data-action="form-team" id="formTeamBtn" disabled>Former l'équipe</button>
+    </div>
+  </div>
+
+  <div class="team-list" id="teamList"></div>
+
+  <footer class="legend no-print">
+    <span class="item"><span class="swatch" style="background:var(--run-0)"></span> Rôle 1</span>
+    <span class="item"><span class="swatch" style="background:var(--run-1)"></span> Rôle 2</span>
+    <span class="item"><span class="swatch" style="background:var(--run-2)"></span> Rôle 3 (trio)</span>
+    <span class="item"><span class="swatch" style="background:var(--accent)"></span> Régularité ≤5% : excellente</span>
+    <span class="item"><span class="swatch" style="background:#ca8a04"></span> 5–12% : correcte</span>
+    <span class="item"><span class="swatch" style="background:var(--danger)"></span> &gt;12% : irrégulière</span>
+  </footer>
+
+</div>
+
+<div class="focus-overlay no-print" id="focusOverlay" hidden></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var LOCAL_KEY = "endurance-eps-local-v1";
+  var RESSENTI = [
+    { emoji:"😫", label:"Très difficile", color:"var(--r0)" },
+    { emoji:"🙁", label:"Difficile", color:"var(--r1)" },
+    { emoji:"😐", label:"Moyen", color:"var(--r2)" },
+    { emoji:"🙂", label:"Ça va", color:"var(--r3)" },
+    { emoji:"😄", label:"Facile", color:"var(--r4)" }
+  ];
+  var NAMES_A = ["Salvador","Ajnur","Lilia","Hannah","Ryan","Mathias","Clarisse","Kyra","Kenan","Ajan","Natanya","Elyas"];
+  var NAMES_B = ["Younes","Léna","Soraya","Noah","Iris","Diego","Maëlle","Timo","Yasmine","Loïc","Selin","Baptiste"];
+
+  function todayIso(){
+    var d = new Date();
+    return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  }
+  function uid(prefix){ return prefix+"_"+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+
+  // `n` = nombre de relais (passages), `lapsPerTurn` = nombre de tours consécutifs
+  // courus par le même élève avant de passer le relais (1 = alternance à chaque tour,
+  // comme avant ; 2 ou 3 = l'élève enchaîne 2 ou 3 tours avant de changer).
+  // `level2Tours` = tours supplémentaires ajoutés après le niveau 1 (même
+  // alternance de rôle, mais distance différente — voir tourDistance()).
+  function makeTours(n, memberCount, lapsPerTurn, level2Tours){
+    memberCount = memberCount || 2;
+    lapsPerTurn = Math.max(1, lapsPerTurn|0 || 1);
+    var out = [];
+    var total = n * lapsPerTurn + Math.max(0, level2Tours|0 || 0);
+    for(var i=0;i<total;i++){ out.push({ role: Math.floor(i/lapsPerTurn) % memberCount, time:null, ressenti:null }); }
+    return out;
+  }
+  function defaultCfg(){
+    return { mode:"relais", classLabel:"EPS — 8P", objectiveName:"Course d'endurance", sessionDate: todayIso(), route:"la Passerelle", distanceM:380, toursPerTeam:6, lapsPerTurn:1, level2Tours:0, level2DistanceM:380, targetTime:"", dist3000TargetM:3000 };
+  }
+  // Two additional per-groupe "évaluation" activity types, alongside the
+  // default relay/rotation mode. A team formed under one of these modes
+  // gets `kind` set on its own record (see createTeam) so that switching a
+  // groupe's mode later never reinterprets teams already formed — each team
+  // keeps rendering according to the kind it was created with.
+  var COOPER_DURATION_MS = 12*60*1000;
+
+  // ---------- local (per-device) preferences ----------
+
+  // Mode course (plein écran) is kept PER GROUPE : `focusByGroup[groupId]`
+  // holds that group's own team selection / mise en page, so switching
+  // d'onglet never carries a selection over to another groupe — chaque
+  // groupe garde son mode course totalement indépendant.
+  var local = { theme:null, activeGroupId:null, focusMode:null, focusByGroup:{}, deviceId:null };
+  (function loadLocal(){
+    try{
+      var raw = localStorage.getItem(LOCAL_KEY);
+      if(raw){ var parsed = JSON.parse(raw); if(parsed && typeof parsed==="object") local = Object.assign(local, parsed); }
+    }catch(e){}
+    if(!local.deviceId) local.deviceId = uid("dev");
+    if(!local.focusByGroup || typeof local.focusByGroup !== "object"){ local.focusByGroup = {}; }
+    delete local.focusConfig; // legacy shared (pre-independence) shape — superseded by focusByGroup
+  })();
+  function saveLocal(){ try{ localStorage.setItem(LOCAL_KEY, JSON.stringify(local)); }catch(e){} }
+  function focusConfigFor(gid){
+    if(!gid) return { teams:[], faceToFace:false, flipFirst:false };
+    if(!local.focusByGroup[gid]) local.focusByGroup[gid] = { teams:[], faceToFace:false, flipFirst:false };
+    return local.focusByGroup[gid];
+  }
+  function activeFocusConfig(){
+    var g = activeGroupMeta();
+    var fc = focusConfigFor(g && g.id);
+    // Teams get deleted or replaced all the time (reshuffle, disband,
+    // archive-restart…), but their id could stay stuck in a focus-mode
+    // selection forever otherwise — silently eating a slot in the "3
+    // équipes maximum" cap and blocking new picks even though nothing
+    // appears selected on screen. A ref can also point at a team that
+    // still exists but now belongs to a DIFFERENT group (leftover from
+    // before mode course was made per-groupe, or a team moved/recreated
+    // under another tab) — just as invisible and just as capable of
+    // silently filling up the 3-slot cap for THIS group. Both cases are
+    // pruned here, keyed on the CURRENT active group, not just "exists
+    // somewhere". Only prune once the teams collection has actually
+    // delivered its first snapshot, so we never mistake "data hasn't
+    // loaded yet" for "these teams no longer exist".
+    if(teamsSnapshotSeen && g && fc.teams && fc.teams.length){
+      var cleaned = fc.teams.filter(function(r){
+        var team = teamsById[r.teamId];
+        return !!team && team.groupId === g.id;
+      });
+      if(cleaned.length !== fc.teams.length){ fc.teams = cleaned; saveLocal(); }
+    }
+    return fc;
+  }
+
+  var openDetails = {};
+  var selection = {};
+  var editingTour = null; // { teamId, tourIndex } — which recorded time is being manually corrected, if any
+
+  // ---------- shared data (db-backed, mirrored in memory) ----------
+
+  var db = null;
+  var online = false;
+  var loaded = false;
+  var seedAttempted = false;
+  var groupsSnapshotSeen = false;
+  var teamsSnapshotSeen = false; // guards pruning stale focus-mode team refs (see activeFocusConfig)
+  var seedResolved = false;
+
+  // Each group now carries its own independent settings (classLabel,
+  // objectiveName, sessionDate, route, distanceM, toursPerTeam, lapsPerTurn,
+  // targetTime — see defaultCfg()) so that groups (classes) never affect
+  // one another.
+  // `config/main` is only read once, as a migration source for groups that
+  // predate this and don't have their own settings yet.
+  var legacyCfg = null;
+  var configSnapshotSeen = false;
+  var groupsMigrated = false;
+  var groupsById = {};
+  var teamsById = {};
+  var historyList = [];
+
+  function groupSettings(g){ return g ? Object.assign(defaultCfg(), g) : defaultCfg(); }
+  function activeSettings(){ return groupSettings(activeGroupMeta()); }
+
+  function stripId(obj){ var c = Object.assign({}, obj); delete c.id; return c; }
+  function handleWriteErr(e){ showToast("Synchronisation impossible pour le moment (" + ((e && e.code) || "réseau") + ")."); }
+  // Snapshot bodies (and their nested arrays/objects, e.g. `roster`,
+  // `tours`) are delivered frozen — mutating them in place (roster.push,
+  // tours[i].time = …) throws "object is not extensible". Always deep
+  // clone a snapshot's data before it enters our editable in-memory model.
+  function deepClone(obj){ return obj == null ? obj : JSON.parse(JSON.stringify(obj)); }
+
+  // ---- write serialization ----
+  // The db capability requires one write at a time per document, and a
+  // clicked-fast sequence (e.g. removing several roster names in a row)
+  // would otherwise fire overlapping writes to the same group/team doc —
+  // the classic last-writer-wins race, silently dropping some edits.
+  // `pendingWrites[path]` also tells the incoming onSnapshot handlers to
+  // keep trusting our own in-memory (more current) copy of a document
+  // instead of overwriting it with a snapshot that predates a write still
+  // in flight for it.
+  var pendingWrites = {};
+  var writeQueues = {};
+  function withWriteLock(path, fn){
+    pendingWrites[path] = (pendingWrites[path]||0) + 1;
+    var prev = writeQueues[path] || Promise.resolve();
+    var settle = function(){ pendingWrites[path] = Math.max(0, (pendingWrites[path]||1) - 1); };
+    var next = prev.catch(function(){}).then(fn).then(
+      function(r){ settle(); return r; },
+      function(err){ settle(); throw err; }
+    );
+    writeQueues[path] = next;
+    return next;
+  }
+
+  function writeGroup(g){
+    if(!db) return;
+    var gid = g.id, path = "groups/"+gid;
+    withWriteLock(path, function(){ return db.doc(path).set(stripId(groupsById[gid] || g)); }).catch(handleWriteErr);
+  }
+  function deleteGroupDoc(gid){
+    if(!db) return;
+    var path = "groups/"+gid;
+    withWriteLock(path, function(){ return db.doc(path).delete(); }).catch(handleWriteErr);
+  }
+  function writeTeam(t){
+    if(!db) return;
+    var tid = t.id, path = "teams/"+tid;
+    withWriteLock(path, function(){ return db.doc(path).set(stripId(teamsById[tid] || t)); }).catch(handleWriteErr);
+  }
+  function deleteTeamDoc(tid){
+    if(!db) return;
+    var path = "teams/"+tid;
+    withWriteLock(path, function(){ return db.doc(path).delete(); }).catch(handleWriteErr);
+  }
+  function addHistory(entry){ if(db) db.collection("history").add(entry).catch(handleWriteErr); }
+
+  var debounceTimers = {};
+  function debounce(key, fn, delay){ clearTimeout(debounceTimers[key]); debounceTimers[key] = setTimeout(fn, delay||450); }
+
+  function allGroupsSorted(){
+    return Object.keys(groupsById).map(function(id){ return groupsById[id]; }).sort(function(a,b){ return (a.order||0)-(b.order||0); });
+  }
+  function teamsForGroup(gid){
+    return Object.keys(teamsById).map(function(id){ return teamsById[id]; })
+      .filter(function(t){ return t.groupId===gid; })
+      .sort(function(a,b){ return (a.order||0)-(b.order||0); });
+  }
+  function activeGroupMeta(){ return groupsById[local.activeGroupId] || allGroupsSorted()[0] || null; }
+
+  function ensureActiveGroup(){
+    if(!local.activeGroupId || !groupsById[local.activeGroupId]){
+      var first = allGroupsSorted()[0];
+      local.activeGroupId = first ? first.id : null;
+      saveLocal();
+    }
+  }
+
+  function createGroup(name, roster, extra){
+    var g = Object.assign({ id: uid("grp"), name:name, roster: roster||[], order: Date.now() }, defaultCfg(), extra||{});
+    groupsById[g.id] = g;
+    writeGroup(g);
+    return g;
+  }
+  function createTeam(groupId, members){
+    var gset = groupSettings(groupsById[groupId]);
+    var mode = gset.mode || "relais";
+    var t;
+    if(mode === "cooper" || mode === "dist3000"){
+      // Binôme coureur (members[0]) + observateur (members[1]) — see
+      // handleEvalSwapRoles for switching who is tested.
+      t = { id: uid("team"), groupId:groupId, kind:mode, members: members.slice(), laps:[], running:false, startedAt:null, finished:false, finishedElapsedMs:null, order: Date.now() };
+    } else {
+      t = { id: uid("team"), groupId:groupId, members: members.slice(), tours: makeTours(gset.toursPerTeam, members.length, gset.lapsPerTurn, gset.level2Tours), running:false, lastLapTs:null, pending:null, order: Date.now() };
+    }
+    teamsById[t.id] = t;
+    writeTeam(t);
+    return t;
+  }
+  function maxTeamSize(g){
+    var mode = g ? (groupSettings(g).mode || "relais") : "relais";
+    return mode === "relais" ? 3 : 2;
+  }
+
+  // One-time migration for groups created before per-group settings existed:
+  // copy the legacy shared config/main fields (or defaults, if there never
+  // was one) onto any group that doesn't yet have its own. Runs only once
+  // both the legacy config snapshot and the groups snapshot have been seen,
+  // so we never migrate a group into defaults before knowing its real
+  // legacy values.
+  function maybeMigrateGroups(){
+    if(groupsMigrated || !configSnapshotSeen || !groupsSnapshotSeen) return;
+    groupsMigrated = true;
+    var defaults = defaultCfg();
+    var src = legacyCfg || {};
+    var any = false;
+    Object.keys(groupsById).forEach(function(gid){
+      var g = groupsById[gid];
+      if(g.toursPerTeam !== undefined) return; // already has its own settings
+      any = true;
+      ["mode","classLabel","objectiveName","sessionDate","route","distanceM","toursPerTeam","lapsPerTurn","level2Tours","level2DistanceM","targetTime","dist3000TargetM"].forEach(function(k){
+        g[k] = src[k] != null ? src[k] : defaults[k];
+      });
+      writeGroup(g);
+    });
+    if(any) render();
+  }
+
+  function seedIfEmpty(){
+    if(seedAttempted || !db) return;
+    seedAttempted = true;
+    db.doc("meta/seedlock").acquire({ holder: local.deviceId, ttlMs: 8000 }).then(function(res){
+      if(!res.acquired) return;
+      return db.doc("config/main").get().then(function(snap){
+        if(snap.exists) return;
+        var defaults = defaultCfg();
+        var gA = Object.assign({ id: uid("grp"), name:"Groupe A", roster: NAMES_A.slice(), order: 1 }, defaults);
+        var gB = Object.assign({ id: uid("grp"), name:"Groupe B", roster: NAMES_B.slice(), order: 2 }, defaults);
+        return Promise.all([
+          db.doc("config/main").set(stripId(defaults)),
+          db.doc("groups/"+gA.id).set(stripId(gA)),
+          db.doc("groups/"+gB.id).set(stripId(gB))
+        ]);
+      });
+    }).catch(function(){ /* another device likely seeded first — ignore */ })
+      .then(function(){
+        seedResolved = true;
+        // self-heal: if seeding is done (by us or someone else) and this view still
+        // sees zero groups a moment later, create one locally so nobody gets stuck.
+        setTimeout(function(){
+          if(allGroupsSorted().length===0){
+            var fresh = createGroup("Groupe A", []);
+            local.activeGroupId = fresh.id;
+            saveLocal();
+          }
+          render();
+        }, 1500);
+      });
+  }
+
+  function startLocalFallback(){
+    online = false;
+    var defaults = defaultCfg();
+    var gA = Object.assign({ id: uid("grp"), name:"Groupe A", roster: NAMES_A.slice(), order:1 }, defaults);
+    var gB = Object.assign({ id: uid("grp"), name:"Groupe B", roster: NAMES_B.slice(), order:2 }, defaults);
+    groupsById[gA.id] = gA; groupsById[gB.id] = gB;
+    ensureActiveGroup();
+    teamsSnapshotSeen = true; // no async teams collection in offline fallback — safe immediately
+    loaded = true;
+    render();
+  }
+
+  function initData(){
+    if(!(window.claude && window.claude.use)){ startLocalFallback(); return; }
+    claude.use("db").then(function(handle){
+      if(!handle){ startLocalFallback(); return; }
+      db = handle; online = true;
+
+      db.doc("config/main").onSnapshot(function(snap){
+        legacyCfg = snap.exists ? deepClone(snap.data()) : {};
+        configSnapshotSeen = true;
+        maybeMigrateGroups();
+        loaded = true; render();
+      }, function(){ showToast("Connexion aux réglages perdue."); });
+
+      db.collection("groups").onSnapshot(function(qs){
+        var next = {};
+        qs.docs.forEach(function(d){
+          var path = "groups/"+d.id;
+          // A write for this doc is still queued/in flight: our in-memory
+          // copy is more current than this snapshot (which may predate
+          // it) — keep ours rather than clobbering unsent local edits.
+          next[d.id] = (pendingWrites[path] > 0 && groupsById[d.id]) ? groupsById[d.id] : Object.assign({id:d.id}, deepClone(d.data()));
+        });
+        Object.keys(groupsById).forEach(function(gid){
+          if(!next[gid] && pendingWrites["groups/"+gid] > 0){ next[gid] = groupsById[gid]; }
+        });
+        groupsById = next;
+        groupsSnapshotSeen = true;
+        maybeMigrateGroups();
+        seedIfEmpty();
+        ensureActiveGroup();
+        loaded = true; render();
+      }, function(){ showToast("Connexion aux groupes perdue."); });
+
+      db.collection("teams").onSnapshot(function(qs){
+        var next = {};
+        qs.docs.forEach(function(d){
+          var path = "teams/"+d.id;
+          next[d.id] = (pendingWrites[path] > 0 && teamsById[d.id]) ? teamsById[d.id] : Object.assign({id:d.id}, deepClone(d.data()));
+        });
+        Object.keys(teamsById).forEach(function(tid){
+          if(!next[tid] && pendingWrites["teams/"+tid] > 0){ next[tid] = teamsById[tid]; }
+        });
+        teamsById = next;
+        teamsSnapshotSeen = true;
+        loaded = true; render();
+      }, function(){ showToast("Connexion aux équipes perdue."); });
+
+      db.collection("history").onSnapshot(function(qs){
+        historyList = qs.docs.map(function(d){ return Object.assign({id:d.id}, deepClone(d.data())); });
+        render();
+      });
+
+      setTimeout(function(){ if(!loaded) startLocalFallback(); }, 10000);
+    }).catch(function(){ startLocalFallback(); });
+  }
+
+  // ---------- formatting helpers ----------
+
+  function applyTheme(){
+    if(local.theme === "dark"){ document.documentElement.setAttribute("data-theme","dark"); }
+    else if(local.theme === "light"){ document.documentElement.setAttribute("data-theme","light"); }
+    else { document.documentElement.removeAttribute("data-theme"); }
+    var icon = document.getElementById("themeIcon");
+    var isDark = local.theme === "dark" || (!local.theme && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    icon.innerHTML = isDark
+      ? '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'
+      : '<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/>';
+  }
+  function fmtDateLong(iso){
+    try{
+      var d = iso ? new Date(iso+"T12:00:00") : new Date();
+      return new Intl.DateTimeFormat("fr-FR",{ day:"numeric", month:"long", year:"numeric" }).format(d);
+    }catch(e){ return iso || ""; }
+  }
+  function fmtTime(ms){
+    if(ms == null) return null;
+    var totalSec = ms/1000, m = Math.floor(totalSec/60), s = totalSec - m*60;
+    return String(m).padStart(2,"0") + ":" + s.toFixed(1).padStart(4,"0");
+  }
+  // Parses back what fmtTime() prints (mm:ss.d), accepting a plain mm:ss
+  // too, for manually correcting a recorded time after the fact.
+  function parseTimeInput(str){
+    if(!str) return null;
+    var m = /^(\d{1,3}):([0-5]?\d)(?:[.,](\d))?$/.exec(String(str).trim());
+    if(!m) return null;
+    var min = parseInt(m[1],10), sec = parseInt(m[2],10), dec = m[3]!=null ? parseInt(m[3],10) : 0;
+    var ms = (min*60+sec)*1000 + dec*100;
+    return ms>0 ? ms : null;
+  }
+  function parseTarget(str){
+    if(!str) return null;
+    var m = /^(\d{1,2}):(\d{2})$/.exec(str.trim());
+    if(!m) return null;
+    return (parseInt(m[1],10)*60 + parseInt(m[2],10)) * 1000;
+  }
+  function speedKmh(distanceM, ms){
+    if(ms == null || ms <= 0) return null;
+    return (distanceM / (ms/1000)) * 3.6;
+  }
+  // Tours au-delà du niveau 1 (relais × tours consécutifs) courent le
+  // "niveau 2", sur une distance de tour différente (parcours plus long/court) —
+  // indispensable pour que vitesse = distance/temps reste juste sur ces tours-là.
+  function tourDistance(s, idx){
+    var level1Total = (s.toursPerTeam||0) * Math.max(1, s.lapsPerTurn|0 || 1);
+    return (idx >= level1Total && s.level2Tours>0) ? (s.level2DistanceM || s.distanceM) : s.distanceM;
+  }
+  function el(tag, cls, html){
+    var e = document.createElement(tag);
+    if(cls) e.className = cls;
+    if(html != null) e.innerHTML = html;
+    return e;
+  }
+  function escapeAttr(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
+  function showToast(msg){
+    var t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(showToast._h);
+    showToast._h = setTimeout(function(){ t.classList.remove("show"); }, 2600);
+  }
+
+  // ---------- retour sonore/haptique (tests 12'/3000 m) ----------
+  // En plein effort, l'observateur·rice ne regarde pas l'écran en pointant
+  // un passage — un simple changement visuel peut passer inaperçu. Un
+  // bip (Web Audio, aucun fichier ni librairie externe : marche même une
+  // fois l'artefact publié) + une vibration si le terminal la propose
+  // donnent une confirmation qu'on perçoit sans avoir à regarder l'iPad.
+  var audioCtx = null;
+  function getAudioCtx(){
+    if(audioCtx) { if(audioCtx.state === "suspended"){ audioCtx.resume().catch(function(){}); } return audioCtx; }
+    try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; }
+    return audioCtx;
+  }
+  function playTone(freq, durationMs, volume){
+    var ctx = getAudioCtx();
+    if(!ctx) return;
+    try{
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.value = freq;
+      var now = ctx.currentTime;
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(volume||0.35, now+0.008);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + durationMs/1000);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + durationMs/1000 + 0.03);
+    }catch(e){}
+  }
+  function vibrate(pattern){
+    try{ if(navigator.vibrate) navigator.vibrate(pattern); }catch(e){}
+  }
+  // Bip aigu et bref = "passage bien enregistré" (même geste répété à
+  // chaque tour du coureur).
+  function playLapConfirmSound(){ playTone(1150, 130, 0.32); vibrate(40); }
+  // Bip grave = "on vient d'annuler/reculer d'un cran" — volontairement
+  // différent du bip de passage pour ne jamais les confondre à l'oreille.
+  function playUndoSound(){ playTone(300, 190, 0.28); vibrate([25,35,25]); }
+
+  // Ne flashe la distance en jaune QUE lorsqu'un passage vient vraiment
+  // d'être enregistré (laps.length a augmenté depuis le dernier rendu de
+  // CE binôme, dans CE contexte) — jamais au premier affichage (reprise
+  // d'une séance en cours) ni lors d'un rendu déclenché par autre chose.
+  // Deux tables séparées (dashboard / mode course) : les deux vues peuvent
+  // être rendues dans le même passage de render(), et chacune doit pouvoir
+  // flasher indépendamment si elle est celle actuellement visible.
+  var evalLapFlashSeenCard = {};
+  var evalLapFlashSeenFocus = {};
+  function evalJustRecordedLap(team, seenMap){
+    var prev = seenMap[team.id];
+    var n = (team.laps||[]).length;
+    var justNow = prev !== undefined && n > prev;
+    seenMap[team.id] = n;
+    return justNow;
+  }
+
+  function assignedNames(group){
+    var set = {};
+    teamsForGroup(group.id).forEach(function(t){ t.members.forEach(function(n){ set[n]=true; }); });
+    return set;
+  }
+  function availableNames(group){
+    var assigned = assignedNames(group);
+    return group.roster.filter(function(n){ return !assigned[n]; });
+  }
+
+  // ---------- header / objective / settings ----------
+
+  function renderHeader(){
+    var s = activeSettings();
+    document.getElementById("classLabel").value = s.classLabel;
+    document.getElementById("dateLabel").textContent = fmtDateLong(s.sessionDate);
+    document.getElementById("syncBanner").hidden = online;
+    document.getElementById("syncOk").hidden = !online;
+  }
+
+  function renderObjective(){
+    var s = activeSettings();
+    var mode = s.mode || "relais";
+    document.getElementById("objName").value = s.objectiveName;
+    var pill = document.getElementById("targetPill");
+    var stepperWrap = document.getElementById("toursStepperWrap");
+    var courseCta = document.querySelector(".course-cta");
+    var openFocusIcon = document.querySelector('.icon-btn[data-action="open-focus"]');
+
+    if(mode === "cooper"){
+      stepperWrap.hidden = true;
+      if(courseCta) courseCta.hidden = false;
+      if(openFocusIcon) openFocusIcon.hidden = false;
+      document.getElementById("objSummary").textContent =
+        "Évaluation course de 12 minutes — tour de " + (s.route || "parcours") + " (" + s.distanceM + " m)";
+      pill.textContent = "Durée : 12:00"; pill.classList.add("set");
+      return;
+    }
+    if(mode === "dist3000"){
+      stepperWrap.hidden = true;
+      if(courseCta) courseCta.hidden = false;
+      if(openFocusIcon) openFocusIcon.hidden = false;
+      document.getElementById("objSummary").textContent =
+        "Évaluation 3000 m — tour de " + (s.route || "parcours") + " (" + s.distanceM + " m) — objectif " + (s.dist3000TargetM||3000) + " m";
+      pill.textContent = "Objectif : " + (s.dist3000TargetM||3000) + " m"; pill.classList.add("set");
+      return;
+    }
+
+    stepperWrap.hidden = false;
+    if(courseCta) courseCta.hidden = false;
+    if(openFocusIcon) openFocusIcon.hidden = false;
+    var lpt = Math.max(1, s.lapsPerTurn|0 || 1);
+    document.getElementById("objSummary").textContent =
+      s.toursPerTeam + " × " + lpt + (lpt>1 ? " tours" : " tour") + " de " + (s.route || "parcours") + " (env. " + s.distanceM + " m)" +
+      (lpt>1 ? " — " + (s.toursPerTeam*lpt) + " tours au total" : "") +
+      (s.level2Tours>0 ? " + " + s.level2Tours + " tour" + (s.level2Tours>1?"s":"") + " niveau 2 (" + (s.level2DistanceM||s.distanceM) + " m)" : "");
+    document.getElementById("toursVal").textContent = lpt>1
+      ? (s.toursPerTeam + (s.toursPerTeam>1 ? " relais" : " relais"))
+      : (s.toursPerTeam + (s.toursPerTeam>1 ? " tours" : " tour"));
+    if(s.targetTime){ pill.textContent = "Cible : " + s.targetTime + " / tour"; pill.classList.add("set"); }
+    else { pill.textContent = "Cible : non définie"; pill.classList.remove("set"); }
+  }
+
+  function fillSettingsFields(){
+    var g = activeGroupMeta();
+    var s = groupSettings(g);
+    var mode = s.mode || "relais";
+    document.getElementById("fClass").value = s.classLabel;
+    document.getElementById("fDate").value = s.sessionDate;
+    document.getElementById("fObjName").value = s.objectiveName;
+    document.getElementById("fMode").value = mode;
+    document.getElementById("fRoute").value = s.route;
+    document.getElementById("fDist").value = s.distanceM;
+    document.getElementById("fTours").value = s.toursPerTeam;
+    document.getElementById("fLapsPerTurn").value = s.lapsPerTurn || 1;
+    document.getElementById("fLevel2Tours").value = s.level2Tours || 0;
+    document.getElementById("fLevel2Dist").value = s.level2DistanceM || s.distanceM;
+    document.getElementById("fTarget").value = s.targetTime;
+    document.getElementById("fRouteCooper").value = s.route;
+    document.getElementById("fDistCooper").value = s.distanceM;
+    document.getElementById("fRoute3000").value = s.route;
+    document.getElementById("fDist3000Lap").value = s.distanceM;
+    document.getElementById("fDist3000Target").value = s.dist3000TargetM || 3000;
+    document.getElementById("relaisFieldsWrap").hidden = mode !== "relais";
+    document.getElementById("cooperFieldsWrap").hidden = mode !== "cooper";
+    document.getElementById("dist3000FieldsWrap").hidden = mode !== "dist3000";
+    document.getElementById("settingsGroupName").textContent = g ? g.name : "–";
+    document.getElementById("rosterGroupName").textContent = g ? g.name : "–";
+    document.getElementById("fGroupName").value = g ? g.name : "";
+
+    var chips = document.getElementById("rosterChips");
+    chips.innerHTML = "";
+    if(g){
+      var assigned = assignedNames(g);
+      g.roster.forEach(function(name){
+        var chip = el("div","roster-chip"+(assigned[name]?" assigned":""));
+        chip.innerHTML = '<span>'+name+(assigned[name]?" (en équipe)":"")+'</span><button class="rm" data-action="remove-name" data-name="'+escapeAttr(name)+'" title="Retirer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>';
+        chips.appendChild(chip);
+      });
+      if(g.roster.length===0){ chips.appendChild(el("div","hint","Aucun prénom pour l'instant.")); }
+    }
+
+    var sel = document.getElementById("fExportSession");
+    sel.innerHTML = "";
+    var curOpt = document.createElement("option");
+    curOpt.value = "current";
+    curOpt.textContent = "Séance en cours — " + fmtDateLong(s.sessionDate);
+    sel.appendChild(curOpt);
+    // Only this group's own archived sessions, plus any older entry from
+    // before groups had independent history (can't tell which group it
+    // belonged to, so it's shown everywhere rather than hidden).
+    historyList.slice().filter(function(h){ return g && (h.groupId==null || h.groupId===g.id); })
+      .sort(function(a,b){ return (b.order||0)-(a.order||0); }).forEach(function(h){
+      var o = document.createElement("option");
+      o.value = "history:"+h.id;
+      o.textContent = "Archivée — " + fmtDateLong(h.sessionDate);
+      sel.appendChild(o);
+    });
+  }
+
+  // ---------- team picker ----------
+
+  function renderPicker(){
+    var g = activeGroupMeta();
+    var card = document.getElementById("pickerCard");
+    if(!g){ card.hidden = true; return; }
+    card.hidden = false;
+    var sel = selection[g.id] || [];
+    var avail = availableNames(g);
+    var mode = groupSettings(g).mode || "relais";
+    var isEvalMode = mode !== "relais";
+
+    document.getElementById("pickerTitle").textContent = isEvalMode ? "Composer un binôme" : "Composer les équipes";
+    document.getElementById("pickerHint").textContent = isEvalMode
+      ? "Cliquez sur 2 prénoms : le 1er sera le coureur testé, le 2e l'observateur (chargé de cocher chaque passage)."
+      : "Cliquez sur 2 prénoms pour former un duo, ou sur 3 pour former un trio (si le groupe est impair).";
+
+    var pool = document.getElementById("namePool");
+    pool.innerHTML = "";
+    if(avail.length===0){
+      pool.appendChild(el("div","pool-empty", g.roster.length===0
+        ? "Ajoutez des prénoms dans les réglages pour commencer."
+        : "Tous les prénoms sont déjà répartis en équipes."));
+    } else {
+      avail.forEach(function(name){
+        var isSel = sel.indexOf(name) !== -1;
+        var chip = el("button","name-chip"+(isSel?" selected":""), name);
+        chip.type = "button";
+        chip.setAttribute("data-action","toggle-name");
+        chip.setAttribute("data-name", name);
+        if(isSel){ chip.insertAdjacentHTML("beforeend", '<span class="order-badge">'+(sel.indexOf(name)+1)+'</span>'); }
+        pool.appendChild(chip);
+      });
+    }
+
+    var selText = document.getElementById("selText");
+    var formBtn = document.getElementById("formTeamBtn");
+    if(sel.length===0){ selText.textContent = "Aucun prénom sélectionné."; }
+    else if(isEvalMode && sel.length===2){ selText.textContent = "Coureur : " + sel[0] + " — Observateur : " + sel[1]; }
+    else { selText.textContent = "Sélection : " + sel.join(", "); }
+    formBtn.disabled = sel.length < 2;
+    formBtn.textContent = isEvalMode ? "Former le binôme" : (sel.length===3 ? "Former le trio" : "Former le duo");
+  }
+
+  // ---------- stats ----------
+
+  function progressiveRegularity(team, role, uptoIndex){
+    var s = groupSettings(groupsById[team.groupId]);
+    var speeds = [];
+    for(var i=0;i<=uptoIndex;i++){
+      var t = team.tours[i];
+      if(t.role === role && t.time != null) speeds.push(speedKmh(tourDistance(s, i), t.time));
+    }
+    if(speeds.length < 2) return null;
+    var mean = speeds.reduce(function(a,b){return a+b;},0)/speeds.length;
+    var variance = speeds.reduce(function(a,v){return a+Math.pow(v-mean,2);},0)/speeds.length;
+    var sd = Math.sqrt(variance);
+    return mean>0 ? (sd/mean*100) : 0;
+  }
+  function regTag(cv){
+    if(cv == null) return '<span style="color:var(--text-faint);">–</span>';
+    var cls = cv<=5?"reg-good":(cv<=12?"reg-mid":"reg-bad");
+    return '<span class="reg-tag '+cls+'">±'+Math.round(cv)+'%</span>';
+  }
+
+  // ---------- tabs ----------
+
+  function renderTabs(){
+    var tabs = document.getElementById("tabs");
+    tabs.innerHTML = "";
+    allGroupsSorted().forEach(function(g){
+      var b = el("button","tab"+(g.id===local.activeGroupId?" active":""), escapeAttr(g.name));
+      b.setAttribute("data-action","set-group");
+      b.setAttribute("data-group", g.id);
+      tabs.appendChild(b);
+    });
+  }
+
+  // ---------- team cards ----------
+
+  function playIconSvg(kind){
+    if(kind==="done") return '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+    if(kind==="stop") return '<svg class="icon" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
+    return '<svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+  }
+
+  var liveButtons = {};
+
+  function currentTourIndex(team){ return team.tours.findIndex(function(t){ return t.time==null; }); }
+
+  function renderTeamCard(team, ti){
+    var idx = currentTourIndex(team);
+    var total = team.tours.length;
+    var done = idx === -1;
+    var activeRole = done ? null : team.tours[idx].role;
+    var targetMs = parseTarget(groupSettings(groupsById[team.groupId]).targetTime);
+    var isTrio = team.members.length === 3;
+
+    var card = el("div","team-card");
+
+    var head = el("div","team-head");
+    var title = el("div","team-title");
+    title.innerHTML = '<span class="team-num">'+(isTrio?"TRIO":"DUO")+' '+(ti+1)+'</span>';
+    var canPickRunner = !done && !team.running;
+    var chips = el("div","chip-row");
+    team.members.forEach(function(name, role){
+      var isActive = activeRole === role;
+      var chip = el(canPickRunner ? "button" : "div", "chip"+(isActive?" running":"")+(canPickRunner?" selectable":""));
+      if(canPickRunner){
+        chip.type = "button";
+        chip.setAttribute("data-action","select-runner");
+        chip.setAttribute("data-team", team.id);
+        chip.setAttribute("data-role", role);
+        chip.title = isActive ? "C'est "+name+" qui va partir" : "Désigner "+name+" pour partir à la place";
+      }
+      chip.innerHTML =
+        '<span class="role-dot" style="background:var(--run-'+role+')"></span>'+
+        '<span>'+name+'</span>'+
+        '<span class="role-badge">'+(done ? "" : (isActive ? "court" : (canPickRunner ? "choisir" : "chrono")))+'</span>';
+      chips.appendChild(chip);
+    });
+    title.appendChild(chips);
+    if(canPickRunner){
+      var pickHint = el("div","runner-hint no-print", "Touchez un prénom pour désigner qui part si besoin.");
+      title.appendChild(pickHint);
+    }
+    head.appendChild(title);
+
+    var tools = el("div","team-tools no-print");
+    var resetBtn = el("button","ghost-btn");
+    resetBtn.title = "Réinitialiser les temps";
+    resetBtn.setAttribute("data-action","reset-team");
+    resetBtn.setAttribute("data-team", team.id);
+    resetBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg>';
+    tools.appendChild(resetBtn);
+    var disbandBtn = el("button","ghost-btn");
+    disbandBtn.title = "Renvoyer les élèves dans la liste";
+    disbandBtn.setAttribute("data-action","disband-team");
+    disbandBtn.setAttribute("data-team", team.id);
+    disbandBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h3M4 8l4-4M4 8l4 4M4 8h9"/><path d="M4 16h9M14 16l4-4-4-4"/></svg>';
+    tools.appendChild(disbandBtn);
+    head.appendChild(tools);
+    card.appendChild(head);
+
+    card.appendChild(el("div","progress-line", done ? "Terminé — "+total+"/"+total+" tours" : "Tour "+(idx+1)+" / "+total));
+
+    var btnWrap = el("div","big-btn-wrap no-print");
+    var btn = el("button","big-btn"+(team.running?" running":"")+(done?" done":""));
+    btn.setAttribute("data-action","big-play");
+    btn.setAttribute("data-team", team.id);
+    if(done){
+      btn.innerHTML = playIconSvg("done") + "<span>Série terminée</span>";
+      btn.disabled = true;
+    } else if(team.running){
+      btn.innerHTML = playIconSvg("stop") + '<span>Arrêter — '+team.members[activeRole]+'</span><span class="live-time" data-live="'+team.id+'">00:00.0</span>';
+    } else {
+      btn.innerHTML = playIconSvg("play") + '<span>Démarrer le tour '+(idx+1)+' — '+team.members[activeRole]+'</span>';
+    }
+    btnWrap.appendChild(btn);
+    if(team.running){
+      var cancelBtn = el("button","action-btn danger no-print", "✕ Annuler ce chrono (erreur de clic)");
+      cancelBtn.type = "button";
+      cancelBtn.setAttribute("data-action","cancel-lap");
+      cancelBtn.setAttribute("data-team", team.id);
+      btnWrap.appendChild(cancelBtn);
+    } else {
+      var lastDoneIdx = (done ? total : idx) - 1;
+      if(lastDoneIdx >= 0){
+        var lastDoneTime = team.tours[lastDoneIdx].time;
+        if(lastDoneTime != null){
+          var resumeBtn = el("button","action-btn warn no-print", "▶ Reprendre le chrono (arrêté à "+fmtTime(lastDoneTime)+")");
+          resumeBtn.type = "button";
+          resumeBtn.setAttribute("data-action","resume-last-tour");
+          resumeBtn.setAttribute("data-team", team.id);
+          btnWrap.appendChild(resumeBtn);
+        }
+        var undoBtn = el("button","action-btn danger no-print", "↺ Annuler le dernier tour enregistré (erreur)");
+        undoBtn.type = "button";
+        undoBtn.setAttribute("data-action","undo-last-tour");
+        undoBtn.setAttribute("data-team", team.id);
+        btnWrap.appendChild(undoBtn);
+      }
+    }
+    card.appendChild(btnWrap);
+
+    if(team.running){
+      liveButtons["card-"+team.id] = { el: btn.querySelector("[data-live]"), since: team.lastLapTs };
+    }
+
+    if(team.pending != null){
+      var pIdx = team.pending;
+      var pTour = team.tours[pIdx];
+      var pName = team.members[pTour.role];
+      var prompt = el("div","ressenti-prompt no-print");
+      prompt.innerHTML = '<div class="q">Comment c\'était pour '+pName+' ? (tour '+(pIdx+1)+')</div>';
+      var opts = el("div","ressenti-options");
+      RESSENTI.forEach(function(r, ridx){
+        var b = el("button","ressenti-btn");
+        b.style.setProperty("--rcolor", r.color);
+        b.style.setProperty("--rcolor-soft", "color-mix(in srgb, "+r.color+" 18%, transparent)");
+        b.setAttribute("data-action","set-ressenti");
+        b.setAttribute("data-team", team.id);
+        b.setAttribute("data-tour", pIdx);
+        b.setAttribute("data-value", ridx);
+        b.innerHTML = '<span class="em">'+r.emoji+'</span><span class="lbl">'+r.label+'</span>';
+        opts.appendChild(b);
+      });
+      prompt.appendChild(opts);
+      card.appendChild(prompt);
+    }
+
+    var isOpen = !!openDetails[team.id];
+    var toggle = el("button","detail-toggle no-print"+(isOpen?" open":""));
+    toggle.setAttribute("data-action","toggle-detail");
+    toggle.setAttribute("data-team", team.id);
+    toggle.innerHTML = (isOpen?"Masquer le détail":"Voir le tableau et le graphique")+' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+    card.appendChild(toggle);
+
+    var detail = el("div","detail");
+    detail.hidden = !isOpen;
+    detail.appendChild(buildTable(team, targetMs));
+    detail.appendChild(buildChart(team));
+    card.appendChild(detail);
+
+    return card;
+  }
+
+  function buildTable(team, targetMs){
+    var s = groupSettings(groupsById[team.groupId]);
+    var level1Total = (s.toursPerTeam||0) * Math.max(1, s.lapsPerTurn|0 || 1);
+    var wrap = el("div","table-scroll");
+    var table = el("table","tours");
+    table.innerHTML = '<thead><tr><th>Tour</th><th>Coureur</th><th>Temps</th><th>Vitesse</th><th>Régularité</th><th>Ressenti</th></tr></thead>';
+    var tbody = el("tbody");
+    team.tours.forEach(function(t, i){
+      var name = team.members[t.role];
+      var tr = el("tr");
+      var speed = speedKmh(tourDistance(s, i), t.time);
+      var isLevel2 = s.level2Tours>0 && i>=level1Total;
+      var isEditingThis = editingTour && editingTour.teamId===team.id && editingTour.tourIndex===i;
+      var timeCell;
+      if(isEditingThis){
+        timeCell = '<span class="time-edit-row">'+
+          '<input type="text" inputmode="decimal" class="mono time-edit-input" value="'+escapeAttr(fmtTime(t.time))+'" placeholder="mm:ss.d">'+
+          '<button type="button" class="ghost-btn" data-action="save-time-edit" data-team="'+team.id+'" data-tour="'+i+'" title="Valider"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button>'+
+          '<button type="button" class="ghost-btn" data-action="cancel-time-edit" title="Annuler"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>'+
+        '</span>';
+      } else if(t.time!=null){
+        timeCell = '<button type="button" class="edit-time-btn" data-action="start-time-edit" data-team="'+team.id+'" data-tour="'+i+'" title="Cliquer pour corriger ce temps manuellement"><span class="'+(targetMs && t.time<=targetMs ? "met-target" : "")+'">'+fmtTime(t.time)+'</span></button>';
+      } else {
+        timeCell = '<span class="empty">–</span>';
+      }
+      tr.innerHTML =
+        '<td class="num">'+(i+1)+(isLevel2?' <span class="reg-tag" style="background:var(--accent-2);color:#fff;" title="Niveau 2">N2</span>':'')+'</td>'+
+        '<td><span class="runner-tag"><span class="dot" style="background:var(--run-'+t.role+')"></span>'+name+'</span></td>'+
+        '<td class="num">'+timeCell+'</td>'+
+        '<td class="num">'+(speed!=null ? speed.toFixed(1)+" km/h" : '<span class="empty">–</span>')+'</td>'+
+        '<td>'+regTag(progressiveRegularity(team, t.role, i))+'</td>'+
+        '<td class="ressenti-td"></td>';
+      var tdR = tr.querySelector(".ressenti-td");
+      RESSENTI.forEach(function(r, ridx){
+        var b = el("button", t.ressenti===ridx ? "active":"", r.emoji);
+        if(t.time==null){ b.disabled = true; b.style.opacity=".2"; }
+        b.title = r.label;
+        b.setAttribute("data-action","set-ressenti");
+        b.setAttribute("data-team", team.id);
+        b.setAttribute("data-tour", i);
+        b.setAttribute("data-value", ridx);
+        tdR.appendChild(b);
+      });
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    wrap.appendChild(table);
+    return wrap;
+  }
+
+  function niceMax(v){
+    if(v<=0) return 10;
+    var mag = Math.pow(10, Math.floor(Math.log10(v)));
+    var norm = v/mag;
+    var step = norm<=2?2:(norm<=5?5:10);
+    return step*mag;
+  }
+
+  function buildChart(team){
+    var s = groupSettings(groupsById[team.groupId]);
+    var box = el("div","chart-box");
+    box.appendChild(el("div","chart-title","Vitesse par passage (km/h)"));
+
+    var series = team.members.map(function(){ return []; });
+    team.tours.forEach(function(t, i){
+      var sp = speedKmh(tourDistance(s, i), t.time);
+      if(sp==null) return;
+      series[t.role].push(sp);
+    });
+    var totalPts = series.reduce(function(a,s){return a+s.length;},0);
+    if(totalPts===0){
+      box.appendChild(el("div","chart-empty","Le graphique apparaîtra après le premier tour chronométré."));
+      return box;
+    }
+
+    var W=560,H=200,padL=40,padR=16,padT=14,padB=28;
+    var innerW = W-padL-padR, innerH = H-padT-padB;
+    var maxPassages = Math.max.apply(null, series.map(function(s){return s.length;}).concat([1]));
+    var allVals = series.reduce(function(a,s){return a.concat(s);},[]);
+    var maxSpeed = niceMax(Math.max.apply(null, allVals.concat([1])) * 1.15);
+
+    function xPos(i){ return maxPassages<=1 ? padL+innerW/2 : padL + (i/(maxPassages-1))*innerW; }
+    function yPos(v){ return padT + innerH - (v/maxSpeed)*innerH; }
+
+    var svgParts = [];
+    svgParts.push('<svg class="chart" viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="Vitesse par passage pour l\'équipe">');
+
+    var ticks = 4;
+    for(var g=0; g<=ticks; g++){
+      var val = (maxSpeed/ticks)*g;
+      var y = yPos(val);
+      svgParts.push('<line class="grid-line" x1="'+padL+'" x2="'+(W-padR)+'" y1="'+y+'" y2="'+y+'"/>');
+      svgParts.push('<text x="'+(padL-8)+'" y="'+(y+3)+'" font-size="10" text-anchor="end">'+Math.round(val)+'</text>');
+    }
+    svgParts.push('<line class="axis-line" x1="'+padL+'" x2="'+(W-padR)+'" y1="'+(H-padB)+'" y2="'+(H-padB)+'"/>');
+    for(var p=0;p<maxPassages;p++){
+      svgParts.push('<text x="'+xPos(p)+'" y="'+(H-padB+16)+'" font-size="10" text-anchor="middle">'+(p+1)+'</text>');
+    }
+    svgParts.push('<text x="'+(W/2)+'" y="'+(H-2)+'" font-size="9.5" text-anchor="middle" style="letter-spacing:.04em;">PASSAGE</text>');
+
+    function drawSeries(values, colorVar, name){
+      if(values.length===0) return;
+      var pts = values.map(function(v,i){ return xPos(i)+","+yPos(v); }).join(" ");
+      svgParts.push('<polyline points="'+pts+'" fill="none" stroke="'+colorVar+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>');
+      values.forEach(function(v,i){
+        svgParts.push('<circle cx="'+xPos(i)+'" cy="'+yPos(v)+'" r="4" fill="'+colorVar+'"><title>'+name+' — passage '+(i+1)+' : '+v.toFixed(1)+' km/h</title></circle>');
+      });
+      var lastI = values.length-1;
+      svgParts.push('<text x="'+(xPos(lastI)+8)+'" y="'+(yPos(values[lastI])+4)+'" font-size="11" font-weight="700" fill="'+colorVar+'">'+values[lastI].toFixed(1)+'</text>');
+    }
+    team.members.forEach(function(name, role){ drawSeries(series[role], "var(--run-"+role+")", name); });
+
+    svgParts.push('</svg>');
+    box.insertAdjacentHTML("beforeend", svgParts.join(""));
+
+    var legend = el("div","chart-title");
+    legend.style.display="flex"; legend.style.gap="14px"; legend.style.flexWrap="wrap"; legend.style.textTransform="none"; legend.style.letterSpacing="0";
+    legend.innerHTML = team.members.map(function(name, role){
+      return '<span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--run-'+role+');display:inline-block;"></span>'+name+'</span>';
+    }).join("");
+    box.appendChild(legend);
+
+    return box;
+  }
+
+  // ---------- évaluations individuelles (test 12 minutes / test 3000 m) ----------
+  // Ces deux modes partagent la même mécanique : un binôme coureur +
+  // observateur, l'observateur coche un passage à chaque tour, et un
+  // chronomètre calcule la vitesse et la distance à partir de la distance
+  // de tour réglée pour le groupe. Elles ne touchent jamais aux équipes de
+  // relais (team.tours) — ces binômes ont leur propre forme de données
+  // (team.laps) reconnaissable via team.kind.
+
+  function evalElapsedMs(team){
+    if(team.running && team.startedAt!=null) return Date.now() - team.startedAt;
+    if(team.finished) return team.finishedElapsedMs || 0;
+    return 0;
+  }
+  function evalTotalM(team, s){
+    return (team.laps||[]).length * (s.distanceM||0);
+  }
+
+  function renderEvalCard(team, ti){
+    var s = groupSettings(groupsById[team.groupId]);
+    var isCooper = team.kind === "cooper";
+    var laps = team.laps || [];
+    var started = team.startedAt != null;
+    var totalM = evalTotalM(team, s);
+    var targetM = s.dist3000TargetM || 3000;
+    var elapsedMs = evalElapsedMs(team);
+    var canSwap = !team.running && laps.length===0;
+
+    var card = el("div","team-card eval-card");
+
+    var head = el("div","team-head");
+    var title = el("div","team-title");
+    title.innerHTML = '<span class="team-num">'+(isCooper?"TEST 12'":"TEST 3000 M")+' '+(ti+1)+'</span>';
+    var chips = el("div","chip-row");
+    var coureurChip = el(canSwap?"button":"div", "chip running"+(canSwap?" selectable":""));
+    if(canSwap){ coureurChip.type="button"; coureurChip.setAttribute("data-action","eval-swap-roles"); coureurChip.setAttribute("data-team", team.id); coureurChip.title = "Inverser les rôles (coureur ↔ observateur)"; }
+    coureurChip.innerHTML = '<span class="role-dot" style="background:var(--run-0)"></span><span>'+team.members[0]+'</span><span class="role-badge">coureur</span>';
+    chips.appendChild(coureurChip);
+    var obsChip = el(canSwap?"button":"div", "chip"+(canSwap?" selectable":""));
+    if(canSwap){ obsChip.type="button"; obsChip.setAttribute("data-action","eval-swap-roles"); obsChip.setAttribute("data-team", team.id); obsChip.title = "Inverser les rôles (coureur ↔ observateur)"; }
+    obsChip.innerHTML = '<span class="role-dot" style="background:var(--run-1)"></span><span>'+team.members[1]+'</span><span class="role-badge">observateur</span>';
+    chips.appendChild(obsChip);
+    title.appendChild(chips);
+    if(canSwap){ title.appendChild(el("div","runner-hint no-print","Touchez un prénom pour inverser qui est testé.")); }
+    head.appendChild(title);
+
+    var tools = el("div","team-tools no-print");
+    var disbandBtn = el("button","ghost-btn");
+    disbandBtn.title = "Renvoyer les élèves dans la liste";
+    disbandBtn.setAttribute("data-action","disband-team");
+    disbandBtn.setAttribute("data-team", team.id);
+    disbandBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h3M4 8l4-4M4 8l4 4M4 8h9"/><path d="M4 16h9M14 16l4-4-4-4"/></svg>';
+    tools.appendChild(disbandBtn);
+    head.appendChild(tools);
+    card.appendChild(head);
+
+    var justRecordedLap = evalJustRecordedLap(team, evalLapFlashSeenCard);
+    var readout = el("div","eval-readout");
+    readout.innerHTML =
+      '<span><span class="lbl">Chrono</span><span class="val" '+(team.running?('data-live-eval="'+team.id+'"'):"")+'>'+fmtTime(elapsedMs)+'</span></span>'+
+      (isCooper ? '<span><span class="lbl">Temps restant</span><span class="val" '+(team.running?('data-live-eval-rem="'+team.id+'"'):"")+'>'+fmtTime(Math.max(0, COOPER_DURATION_MS-elapsedMs))+'</span></span>' : '')+
+      '<span><span class="lbl">Distance</span><span class="val distance-val'+(justRecordedLap?" lap-flash":"")+'">'+totalM+' m</span></span>'+
+      (!isCooper ? '<span><span class="lbl">Objectif</span><span class="val">'+targetM+' m</span></span>' : '');
+    card.appendChild(readout);
+
+    if(!isCooper){
+      var track = el("div","eval-progress-track");
+      var fill = el("div","eval-progress-fill");
+      fill.style.width = Math.min(100, targetM>0 ? (totalM/targetM*100) : 0) + "%";
+      track.appendChild(fill);
+      card.appendChild(track);
+    }
+
+    card.appendChild(el("div","progress-line", team.finished
+      ? "Terminé — " + laps.length + " passage" + (laps.length>1?"s":"") + " — " + fmtTime(team.finishedElapsedMs) + (isCooper ? "" : " pour "+totalM+" m")
+      : (team.running ? laps.length + " passage" + (laps.length>1?"s":"") + " enregistré" + (laps.length>1?"s":"") : "Prêt à démarrer")));
+
+    var btnWrap = el("div","big-btn-wrap no-print");
+    if(laps.length>0){
+      var undoBtn = el("button","action-btn danger no-print", "↺ Annuler le dernier passage (mal coché)");
+      undoBtn.type = "button";
+      undoBtn.setAttribute("data-action","eval-undo-lap");
+      undoBtn.setAttribute("data-team", team.id);
+      btnWrap.appendChild(undoBtn);
+    }
+    if(!started && !team.finished){
+      var startBtn = el("button","big-btn","▶ Démarrer le chrono");
+      startBtn.setAttribute("data-action","eval-start");
+      startBtn.setAttribute("data-team", team.id);
+      btnWrap.appendChild(startBtn);
+    } else if(team.running){
+      var lapBtn = el("button","lap-btn","🏁 Passage de "+team.members[0]);
+      lapBtn.type = "button";
+      lapBtn.setAttribute("data-action","eval-lap");
+      lapBtn.setAttribute("data-team", team.id);
+      btnWrap.appendChild(lapBtn);
+      var stopBtn = el("button","action-btn neutral no-print","Arrêter maintenant");
+      stopBtn.setAttribute("data-action","eval-stop");
+      stopBtn.setAttribute("data-team", team.id);
+      btnWrap.appendChild(stopBtn);
+    } else if(team.finished){
+      var doneBtn = el("button","big-btn done","Test terminé");
+      doneBtn.disabled = true;
+      btnWrap.appendChild(doneBtn);
+      var restartBtn = el("button","action-btn warn no-print","↺ Recommencer");
+      restartBtn.style.marginTop = "8px";
+      restartBtn.setAttribute("data-action","eval-reset");
+      restartBtn.setAttribute("data-team", team.id);
+      btnWrap.appendChild(restartBtn);
+    }
+    card.appendChild(btnWrap);
+
+    if(team.running){
+      liveButtons["eval-card-"+team.id] = {
+        kind:"eval", teamId: team.id,
+        el: readout.querySelector('[data-live-eval="'+team.id+'"]'),
+        remainingEl: isCooper ? readout.querySelector('[data-live-eval-rem="'+team.id+'"]') : null,
+        targetMs: isCooper ? COOPER_DURATION_MS : null
+      };
+    }
+
+    var isOpen = !!openDetails[team.id];
+    var toggle = el("button","detail-toggle no-print"+(isOpen?" open":""));
+    toggle.setAttribute("data-action","toggle-detail");
+    toggle.setAttribute("data-team", team.id);
+    toggle.innerHTML = (isOpen?"Masquer le détail":"Voir le tableau et le graphique")+' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+    card.appendChild(toggle);
+
+    var detail = el("div","detail");
+    detail.hidden = !isOpen;
+    detail.appendChild(buildEvalTable(team, s));
+    detail.appendChild(buildEvalChart(team, s));
+    card.appendChild(detail);
+
+    return card;
+  }
+
+  function buildEvalTable(team, s){
+    var wrap = el("div","table-scroll");
+    var table = el("table","tours");
+    table.innerHTML = '<thead><tr><th>Passage</th><th>Temps du tour</th><th>Temps cumulé</th><th>Vitesse</th><th>Distance cumulée</th></tr></thead>';
+    var tbody = el("tbody");
+    var laps = team.laps || [];
+    laps.forEach(function(lap, i){
+      var prevMs = i>0 ? laps[i-1].ms : 0;
+      var segMs = lap.ms - prevMs;
+      var sp = speedKmh(s.distanceM, segMs);
+      var tr = el("tr");
+      tr.innerHTML =
+        '<td class="num">'+(i+1)+'</td>'+
+        '<td class="num">'+fmtTime(segMs)+'</td>'+
+        '<td class="num">'+fmtTime(lap.ms)+'</td>'+
+        '<td class="num">'+(sp!=null ? sp.toFixed(1)+" km/h" : "–")+'</td>'+
+        '<td class="num">'+((i+1)*(s.distanceM||0))+' m</td>';
+      tbody.appendChild(tr);
+    });
+    if(laps.length===0){
+      var tr0 = el("tr");
+      tr0.innerHTML = '<td colspan="5" class="empty">Aucun passage enregistré pour l\'instant.</td>';
+      tbody.appendChild(tr0);
+    }
+    table.appendChild(tbody);
+    wrap.appendChild(table);
+    return wrap;
+  }
+
+  function buildEvalChart(team, s){
+    var box = el("div","chart-box");
+    box.appendChild(el("div","chart-title","Vitesse par passage (km/h) — régularité de "+team.members[0]));
+    var laps = team.laps || [];
+    var speeds = laps.map(function(lap, i){
+      var prevMs = i>0 ? laps[i-1].ms : 0;
+      return speedKmh(s.distanceM, lap.ms - prevMs);
+    }).filter(function(v){ return v!=null; });
+    if(speeds.length===0){
+      box.appendChild(el("div","chart-empty","Le graphique apparaîtra après le premier passage."));
+      return box;
+    }
+    var W=560,H=200,padL=40,padR=16,padT=14,padB=28;
+    var innerW = W-padL-padR, innerH = H-padT-padB;
+    var maxPassages = speeds.length;
+    var maxSpeed = niceMax(Math.max.apply(null, speeds.concat([1])) * 1.15);
+    function xPos(i){ return maxPassages<=1 ? padL+innerW/2 : padL + (i/(maxPassages-1))*innerW; }
+    function yPos(v){ return padT + innerH - (v/maxSpeed)*innerH; }
+    var svgParts = [];
+    svgParts.push('<svg class="chart" viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="Vitesse par passage">');
+    var ticks = 4;
+    for(var gi=0; gi<=ticks; gi++){
+      var val = (maxSpeed/ticks)*gi;
+      var y = yPos(val);
+      svgParts.push('<line class="grid-line" x1="'+padL+'" x2="'+(W-padR)+'" y1="'+y+'" y2="'+y+'"/>');
+      svgParts.push('<text x="'+(padL-8)+'" y="'+(y+3)+'" font-size="10" text-anchor="end">'+Math.round(val)+'</text>');
+    }
+    svgParts.push('<line class="axis-line" x1="'+padL+'" x2="'+(W-padR)+'" y1="'+(H-padB)+'" y2="'+(H-padB)+'"/>');
+    for(var p=0;p<maxPassages;p++){
+      svgParts.push('<text x="'+xPos(p)+'" y="'+(H-padB+16)+'" font-size="10" text-anchor="middle">'+(p+1)+'</text>');
+    }
+    svgParts.push('<text x="'+(W/2)+'" y="'+(H-2)+'" font-size="9.5" text-anchor="middle" style="letter-spacing:.04em;">PASSAGE</text>');
+    var pts = speeds.map(function(v,i){ return xPos(i)+","+yPos(v); }).join(" ");
+    svgParts.push('<polyline points="'+pts+'" fill="none" stroke="var(--accent-2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>');
+    speeds.forEach(function(v,i){
+      svgParts.push('<circle cx="'+xPos(i)+'" cy="'+yPos(v)+'" r="4" fill="var(--accent-2)"><title>Passage '+(i+1)+' : '+v.toFixed(1)+' km/h</title></circle>');
+    });
+    var lastI = speeds.length-1;
+    svgParts.push('<text x="'+(xPos(lastI)+8)+'" y="'+(yPos(speeds[lastI])+4)+'" font-size="11" font-weight="700" fill="var(--accent-2)">'+speeds[lastI].toFixed(1)+'</text>');
+    svgParts.push('</svg>');
+    box.insertAdjacentHTML("beforeend", svgParts.join(""));
+    return box;
+  }
+
+  function handleEvalSwapRoles(tid){
+    var team = teamsById[tid];
+    if(!team || team.running || (team.laps&&team.laps.length>0)) return;
+    team.members = [team.members[1], team.members[0]];
+    render();
+    writeTeam(team);
+  }
+
+  function handleEvalStart(tid){
+    var team = teamsById[tid];
+    if(!team || team.running) return;
+    team.running = true;
+    team.startedAt = Date.now();
+    team.laps = [];
+    team.finished = false;
+    team.finishedElapsedMs = null;
+    render();
+    writeTeam(team);
+  }
+
+  function handleEvalLap(tid){
+    var team = teamsById[tid];
+    if(!team || !team.running) return;
+    var elapsed = Date.now() - team.startedAt;
+    team.laps = team.laps || [];
+    team.laps.push({ ms: elapsed });
+    playLapConfirmSound();
+    if(team.kind === "dist3000"){
+      var s = groupSettings(groupsById[team.groupId]);
+      var targetM = s.dist3000TargetM || 3000;
+      if(evalTotalM(team, s) >= targetM){
+        team.running = false; team.finished = true; team.finishedElapsedMs = elapsed;
+        showToast("3000 m atteints — chrono arrêté.");
+      }
+    }
+    render();
+    writeTeam(team);
+  }
+
+  function handleEvalStop(tid){
+    var team = teamsById[tid];
+    if(!team || !team.running) return;
+    var elapsed = Date.now() - team.startedAt;
+    team.running = false; team.finished = true; team.finishedElapsedMs = elapsed;
+    render();
+    writeTeam(team);
+  }
+
+  // Retire le dernier passage coché par erreur. Si ce passage avait
+  // déclenché l'arrêt automatique du test 3000 m (distance atteinte) et
+  // qu'après retrait la distance cible n'est plus atteinte, le chrono
+  // reprend automatiquement (le coureur n'a en réalité jamais cessé de
+  // courir pendant la correction).
+  function handleEvalUndoLap(tid){
+    var team = teamsById[tid];
+    if(!team || !team.laps || team.laps.length===0) return;
+    team.laps.pop();
+    playUndoSound();
+    if(team.finished && team.kind === "dist3000"){
+      var s = groupSettings(groupsById[team.groupId]);
+      var targetM = s.dist3000TargetM || 3000;
+      if(evalTotalM(team, s) < targetM){
+        team.finished = false; team.running = true; team.finishedElapsedMs = null;
+      }
+    }
+    render();
+    writeTeam(team);
+    showToast("Dernier passage annulé.");
+  }
+
+  function handleEvalReset(tid){
+    var team = teamsById[tid];
+    if(!team) return;
+    team.running = false;
+    team.startedAt = null;
+    team.laps = [];
+    team.finished = false;
+    team.finishedElapsedMs = null;
+    render();
+    writeTeam(team);
+  }
+
+  function renderTeamList(){
+    var g = activeGroupMeta();
+    var list = document.getElementById("teamList");
+    list.innerHTML = "";
+    if(!g){ return; }
+    var teams = teamsForGroup(g.id);
+    if(teams.length===0){
+      var isEvalMode = (groupSettings(g).mode||"relais") !== "relais";
+      list.appendChild(el("div","empty-state", isEvalMode
+        ? "Aucun binôme pour l'instant — sélectionnez 2 prénoms ci-dessus (coureur puis observateur) pour commencer."
+        : "Aucune équipe pour l'instant — sélectionnez 2 ou 3 prénoms ci-dessus pour former la première équipe."));
+      return;
+    }
+    teams.forEach(function(team, i){
+      list.appendChild(team.kind ? renderEvalCard(team, i) : renderTeamCard(team, i));
+    });
+  }
+
+  // ---------- focus / split-screen mode (indépendant par groupe) ----------
+
+  function renderFocusOverlay(){
+    var overlay = document.getElementById("focusOverlay");
+    if(!local.focusMode){ overlay.hidden = true; overlay.innerHTML = ""; return; }
+    overlay.hidden = false;
+    overlay.innerHTML = "";
+
+    var g = activeGroupMeta();
+    var fc = activeFocusConfig();
+
+    var topbar = el("div","focus-topbar");
+    topbar.innerHTML = '<span class="ftitle">Mode course'+(g?' — '+escapeAttr(g.name):'')+'</span>';
+    var faceToFaceActive = local.focusMode !== "setup" && fc.faceToFace &&
+      (fc.teams||[]).filter(function(r){ return teamsById[r.teamId]; }).length===2;
+    if(faceToFaceActive){
+      var flipBtn = el("button","focus-flip-btn no-print");
+      flipBtn.title = "Inverser le sens de la moitié retournée";
+      flipBtn.setAttribute("data-action","flip-face-to-face");
+      flipBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>';
+      topbar.appendChild(flipBtn);
+    }
+    if(local.focusMode !== "setup"){
+      // Reopening "mode course" from the header icon resumes the same
+      // duos/trios shown last time (convenient mid-session) — but that left
+      // no way back to the picker once a selection had been made once.
+      // This button is the escape hatch: it goes back to the picker
+      // WITHOUT clearing the current selection, so the teacher can swap in
+      // different duos/trios.
+      var changeBtn = el("button","focus-exit-btn no-print","Changer les équipes");
+      changeBtn.setAttribute("data-action","focus-back-setup");
+      topbar.appendChild(changeBtn);
+    }
+    var exitBtn = el("button","focus-exit-btn","Quitter le mode course");
+    exitBtn.setAttribute("data-action","close-focus");
+    topbar.appendChild(exitBtn);
+    overlay.appendChild(topbar);
+
+    if(local.focusMode === "setup"){
+      overlay.appendChild(renderFocusSetup());
+    } else {
+      var refs = (fc.teams||[]).map(function(ref){ return teamsById[ref.teamId]; }).filter(Boolean);
+      if(refs.length===0){
+        var empty = el("div","focus-empty","Aucune équipe sélectionnée.");
+        overlay.appendChild(empty);
+        var backBtn = el("button","btn primary","Choisir des équipes");
+        backBtn.style.margin = "0 auto";
+        backBtn.setAttribute("data-action","focus-back-setup");
+        overlay.appendChild(backBtn);
+        return;
+      }
+      var split = el("div","focus-split"+(faceToFaceActive?" face-to-face":""));
+      refs.forEach(function(team, i){
+        var half = team.kind ? renderEvalFocusHalf(team) : renderFocusHalf(team);
+        var flipIdx = fc.flipFirst ? 0 : 1;
+        if(faceToFaceActive && i===flipIdx) half.classList.add("flipped");
+        split.appendChild(half);
+      });
+      overlay.appendChild(split);
+    }
+  }
+
+  function renderFocusSetup(){
+    var g = activeGroupMeta();
+    var fc = activeFocusConfig();
+    var wrap = el("div","focus-setup");
+    wrap.appendChild(el("div","picker-hint","Choisis 1 à 3 équipes de "+(g?('« '+escapeAttr(g.name)+' »'):"ce groupe")+" à afficher en plein écran sur cet appareil. Le mode course est propre à ce groupe : les autres groupes ont leur propre sélection, indépendante."));
+    var currentSel = (fc.teams||[]).map(function(r){ return r.teamId; });
+    // Le mode course (plein écran) affiche aussi bien les équipes de relais
+    // que les binômes d'évaluation (test 12', test 3000 m) — chacun avec son
+    // propre affichage plein écran adapté.
+    var teams = g ? teamsForGroup(g.id) : [];
+
+    if(teams.length===0){
+      wrap.appendChild(el("div","pool-empty","Aucune équipe n'a encore été formée dans ce groupe."));
+    } else {
+      var block = el("div","focus-group-block");
+      teams.forEach(function(team, i){
+        var isSel = currentSel.indexOf(team.id) !== -1;
+        var row = el("div","focus-team-row"+(isSel?" selected":""));
+        row.setAttribute("data-action","toggle-focus-team");
+        row.setAttribute("data-team", team.id);
+        var label;
+        if(team.kind === "cooper"){
+          label = "Test 12' "+(i+1)+" — "+team.members[0]+" (obs. "+team.members[1]+")";
+        } else if(team.kind === "dist3000"){
+          label = "Test 3000 m "+(i+1)+" — "+team.members[0]+" (obs. "+team.members[1]+")";
+        } else {
+          label = (team.members.length===3?"Trio ":"Duo ")+(i+1)+" — "+team.members.join(" / ");
+        }
+        row.innerHTML = '<span class="fnum">'+(i+1)+'</span><span>'+label+'</span>';
+        block.appendChild(row);
+      });
+      wrap.appendChild(block);
+    }
+
+    if(currentSel.length===2){
+      var toggle = el("div","focus-toggle-row"+(fc.faceToFace?" on":""));
+      toggle.setAttribute("data-action","toggle-face-to-face");
+      toggle.innerHTML =
+        '<div class="ftxt"><div class="t1">Face à face (tablette posée à plat)</div>'+
+        '<div class="t2">Un des deux écrans est retourné à 180° : chaque équipe le lit à l\'endroit depuis son côté de la table.</div></div>'+
+        '<div class="focus-switch"><div class="knob"></div></div>';
+      wrap.appendChild(toggle);
+    }
+
+    var bar = el("div","picker-bar");
+    bar.style.marginTop = "16px";
+    var selText = el("span","sel-text", currentSel.length ? (currentSel.length+" équipe(s) sélectionnée(s).") : "Aucune équipe sélectionnée.");
+    bar.appendChild(selText);
+    if(currentSel.length>0){
+      // Safety valve: if the count above ever looks wrong (e.g. it says
+      // équipes are selected but none of the rows show as highlighted),
+      // this clears this group's mode-course selection outright — no need
+      // to hunt down why, just start over.
+      var clearBtn = el("button","btn","Vider la sélection");
+      clearBtn.setAttribute("data-action","clear-focus-selection");
+      bar.appendChild(clearBtn);
+    }
+    var startBtn = el("button","btn primary", "Afficher");
+    startBtn.disabled = currentSel.length===0;
+    startBtn.setAttribute("data-action","start-focus");
+    bar.appendChild(startBtn);
+    wrap.appendChild(bar);
+
+    return wrap;
+  }
+
+  function renderFocusHalf(team){
+    var idx = currentTourIndex(team);
+    var total = team.tours.length;
+    var done = idx === -1;
+    var activeRole = done ? null : team.tours[idx].role;
+
+    var half = el("div","focus-half");
+
+    var focusCanPickRunner = !done && !team.running;
+    var names = el("div","focus-names");
+    team.members.forEach(function(name, role){
+      var isActive = activeRole === role;
+      var chip = el(focusCanPickRunner ? "button" : "div", "focus-chip"+(isActive?" running":"")+(focusCanPickRunner?" selectable":""));
+      if(focusCanPickRunner){
+        chip.type = "button";
+        chip.setAttribute("data-action","select-runner");
+        chip.setAttribute("data-team", team.id);
+        chip.setAttribute("data-role", role);
+        chip.title = isActive ? "C'est "+name+" qui va partir" : "Désigner "+name+" pour partir à la place";
+      }
+      chip.innerHTML = '<span class="role-dot" style="background:var(--run-'+role+')"></span><span>'+name+'</span>';
+      names.appendChild(chip);
+    });
+    half.appendChild(names);
+    if(focusCanPickRunner){
+      half.appendChild(el("div","runner-hint no-print", "Touchez un prénom pour désigner qui part si besoin."));
+    }
+
+    half.appendChild(el("div","focus-progress", done ? "Terminé — "+total+"/"+total+" tours" : "Tour "+(idx+1)+" / "+total));
+
+    var btn = el("button","focus-bigbtn"+(team.running?" running":"")+(done?" done":""));
+    btn.setAttribute("data-action","big-play");
+    btn.setAttribute("data-team", team.id);
+    if(done){
+      btn.innerHTML = playIconSvg("done") + "<span>Série terminée</span>";
+      btn.disabled = true;
+    } else if(team.running){
+      btn.innerHTML = playIconSvg("stop") + '<span>Arrêter — '+team.members[activeRole]+'</span><span class="flive" data-live="'+team.id+'">00:00.0</span>';
+    } else {
+      btn.innerHTML = playIconSvg("play") + '<span>Démarrer — '+team.members[activeRole]+'</span>';
+    }
+    half.appendChild(btn);
+    if(team.running){
+      var focusCancelBtn = el("button","action-btn danger no-print", "✕ Annuler ce chrono (erreur de clic)");
+      focusCancelBtn.type = "button";
+      focusCancelBtn.setAttribute("data-action","cancel-lap");
+      focusCancelBtn.setAttribute("data-team", team.id);
+      half.appendChild(focusCancelBtn);
+    } else {
+      var focusLastDoneIdx = (done ? total : idx) - 1;
+      if(focusLastDoneIdx >= 0){
+        var focusLastDoneTime = team.tours[focusLastDoneIdx].time;
+        if(focusLastDoneTime != null){
+          var focusResumeBtn = el("button","action-btn warn no-print", "▶ Reprendre le chrono (arrêté à "+fmtTime(focusLastDoneTime)+")");
+          focusResumeBtn.type = "button";
+          focusResumeBtn.setAttribute("data-action","resume-last-tour");
+          focusResumeBtn.setAttribute("data-team", team.id);
+          half.appendChild(focusResumeBtn);
+        }
+        var focusUndoBtn = el("button","action-btn danger no-print", "↺ Annuler le dernier tour enregistré");
+        focusUndoBtn.type = "button";
+        focusUndoBtn.setAttribute("data-action","undo-last-tour");
+        focusUndoBtn.setAttribute("data-team", team.id);
+        half.appendChild(focusUndoBtn);
+      }
+    }
+
+    if(team.running){
+      liveButtons["focus-"+team.id] = { el: btn.querySelector("[data-live]"), since: team.lastLapTs };
+    }
+
+    if(team.pending != null){
+      var pTour = team.tours[team.pending];
+      var pName = team.members[pTour.role];
+      var box = el("div","focus-ressenti");
+      box.innerHTML = '<div class="q">Comment c\'était pour '+pName+' ?</div>';
+      var opts = el("div","focus-ressenti-opts");
+      RESSENTI.forEach(function(r, ridx){
+        var b = el("button","ressenti-btn");
+        b.style.setProperty("--rcolor", r.color);
+        b.style.setProperty("--rcolor-soft", "color-mix(in srgb, "+r.color+" 18%, transparent)");
+        b.setAttribute("data-action","set-ressenti");
+        b.setAttribute("data-team", team.id);
+        b.setAttribute("data-tour", team.pending);
+        b.setAttribute("data-value", ridx);
+        b.innerHTML = '<span class="em">'+r.emoji+'</span><span class="lbl">'+r.label+'</span>';
+        opts.appendChild(b);
+      });
+      box.appendChild(opts);
+      half.appendChild(box);
+    }
+
+    return half;
+  }
+
+  function renderEvalFocusHalf(team){
+    var s = groupSettings(groupsById[team.groupId]);
+    var isCooper = team.kind === "cooper";
+    var laps = team.laps || [];
+    var started = team.startedAt != null;
+    var totalM = evalTotalM(team, s);
+    var targetM = s.dist3000TargetM || 3000;
+    var elapsedMs = evalElapsedMs(team);
+    var canSwap = !team.running && laps.length===0;
+
+    var half = el("div","focus-half");
+
+    var names = el("div","focus-names");
+    var roleLabels = ["coureur","observateur"];
+    team.members.forEach(function(name, role){
+      var chip = el(canSwap ? "button" : "div", "focus-chip"+(role===0?" running":"")+(canSwap?" selectable":""));
+      if(canSwap){
+        chip.type = "button";
+        chip.setAttribute("data-action","eval-swap-roles");
+        chip.setAttribute("data-team", team.id);
+        chip.title = "Inverser les rôles (coureur ↔ observateur)";
+      }
+      chip.innerHTML = '<span class="role-dot" style="background:var(--run-'+role+')"></span><span>'+name+'</span><span class="role-badge">'+roleLabels[role]+'</span>';
+      names.appendChild(chip);
+    });
+    half.appendChild(names);
+    if(canSwap){ half.appendChild(el("div","runner-hint no-print", "Touchez un prénom pour inverser qui est testé.")); }
+
+    half.appendChild(el("div","focus-progress", (isCooper?"TEST 12' — ":"TEST 3000 M — ")+(team.finished ? "Terminé" : (team.running ? "En cours" : "Prêt"))));
+
+    var justRecordedLap = evalJustRecordedLap(team, evalLapFlashSeenFocus);
+    var readout = el("div","eval-readout");
+    readout.innerHTML =
+      '<span><span class="lbl">Chrono</span><span class="val" '+(team.running?('data-live-eval="'+team.id+'"'):"")+'>'+fmtTime(elapsedMs)+'</span></span>'+
+      (isCooper ? '<span><span class="lbl">Temps restant</span><span class="val" '+(team.running?('data-live-eval-rem="'+team.id+'"'):"")+'>'+fmtTime(Math.max(0, COOPER_DURATION_MS-elapsedMs))+'</span></span>' : '')+
+      '<span><span class="lbl">Distance</span><span class="val distance-val'+(justRecordedLap?" lap-flash":"")+'">'+totalM+' m</span></span>'+
+      (!isCooper ? '<span><span class="lbl">Objectif</span><span class="val">'+targetM+' m</span></span>' : '');
+    half.appendChild(readout);
+
+    if(!isCooper){
+      var track = el("div","eval-progress-track");
+      var fill = el("div","eval-progress-fill");
+      fill.style.width = Math.min(100, targetM>0 ? (totalM/targetM*100) : 0) + "%";
+      track.appendChild(fill);
+      half.appendChild(track);
+    }
+
+    half.appendChild(el("div","progress-line no-print", team.finished
+      ? "Terminé — " + laps.length + " passage" + (laps.length>1?"s":"") + " — " + fmtTime(team.finishedElapsedMs) + (isCooper ? "" : " pour "+totalM+" m")
+      : (team.running ? laps.length + " passage" + (laps.length>1?"s":"") + " enregistré" + (laps.length>1?"s":"") : "Prêt à démarrer")));
+
+    if(laps.length>0){
+      var undoBtn = el("button","action-btn danger no-print", "↺ Annuler le dernier passage (mal coché)");
+      undoBtn.type = "button";
+      undoBtn.setAttribute("data-action","eval-undo-lap");
+      undoBtn.setAttribute("data-team", team.id);
+      half.appendChild(undoBtn);
+    }
+    if(!started && !team.finished){
+      var startBtn = el("button","focus-bigbtn");
+      startBtn.setAttribute("data-action","eval-start");
+      startBtn.setAttribute("data-team", team.id);
+      startBtn.innerHTML = playIconSvg("play") + "<span>Démarrer le chrono</span>";
+      half.appendChild(startBtn);
+    } else if(team.running){
+      var lapBtn = el("button","focus-bigbtn lap");
+      lapBtn.type = "button";
+      lapBtn.setAttribute("data-action","eval-lap");
+      lapBtn.setAttribute("data-team", team.id);
+      lapBtn.innerHTML = '🏁 <span>Passage de '+team.members[0]+'</span>';
+      half.appendChild(lapBtn);
+      var stopBtn = el("button","action-btn neutral no-print", "Arrêter maintenant");
+      stopBtn.type = "button";
+      stopBtn.setAttribute("data-action","eval-stop");
+      stopBtn.setAttribute("data-team", team.id);
+      half.appendChild(stopBtn);
+    } else if(team.finished){
+      var doneBtn = el("button","focus-bigbtn done");
+      doneBtn.disabled = true;
+      doneBtn.innerHTML = playIconSvg("done") + "<span>Test terminé</span>";
+      half.appendChild(doneBtn);
+      var restartBtn = el("button","action-btn warn no-print", "↺ Recommencer");
+      restartBtn.type = "button";
+      restartBtn.setAttribute("data-action","eval-reset");
+      restartBtn.setAttribute("data-team", team.id);
+      half.appendChild(restartBtn);
+    }
+
+    if(team.running){
+      liveButtons["eval-focus-"+team.id] = {
+        kind:"eval", teamId: team.id,
+        el: readout.querySelector('[data-live-eval="'+team.id+'"]'),
+        remainingEl: isCooper ? readout.querySelector('[data-live-eval-rem="'+team.id+'"]') : null,
+        targetMs: isCooper ? COOPER_DURATION_MS : null
+      };
+    }
+
+    return half;
+  }
+
+  function render(){
+    if(!loaded){
+      var list = document.getElementById("teamList");
+      list.innerHTML = "";
+      list.appendChild(el("div","empty-state","Chargement de la séance…"));
+      renderFocusOverlay();
+      return;
+    }
+    // Online, groups have been queried at least once, but seeding the first
+    // groups hasn't finished yet: the dashboard would look ready but every
+    // action needing a group (add names, form a team…) would silently fail.
+    // Show a short "preparing" placeholder instead until groups appear.
+    if(online && groupsSnapshotSeen && !seedResolved && allGroupsSorted().length===0){
+      var list2 = document.getElementById("teamList");
+      list2.innerHTML = "";
+      list2.appendChild(el("div","empty-state","Préparation de la séance…"));
+      document.getElementById("pickerCard").hidden = true;
+      renderFocusOverlay();
+      return;
+    }
+    renderHeader();
+    renderTabs();
+    renderObjective();
+    fillSettingsFields();
+    renderPicker();
+    liveButtons = {};
+    renderTeamList();
+    renderFocusOverlay();
+  }
+
+  // ---------- handlers ----------
+
+  function handleBigPlay(tid){
+    var team = teamsById[tid];
+    if(!team) return;
+    var idx = currentTourIndex(team);
+    if(idx === -1) return;
+    if(!team.running){
+      team.running = true;
+      team.lastLapTs = Date.now();
+    } else {
+      var elapsed = Date.now() - team.lastLapTs;
+      team.tours[idx].time = elapsed;
+      team.running = false;
+      team.pending = idx;
+      openDetails[tid] = true;
+    }
+    render();
+    writeTeam(team);
+  }
+
+  // Lets the teacher explicitly designate which team member is about to run
+  // the upcoming (not-yet-timed) tour, overriding the automatic role
+  // alternation — a safety net for when the auto-guess doesn't match who's
+  // actually about to leave (after a mix-up, a skipped tour, an undo, etc.).
+  // Only touches a tour that hasn't started yet; never changes history.
+  function handleSelectRunner(tid, role){
+    var team = teamsById[tid];
+    if(!team || team.running) return;
+    var idx = currentTourIndex(team);
+    if(idx === -1) return;
+    role = parseInt(role, 10);
+    if(isNaN(role) || role < 0 || role >= team.members.length) return;
+    if(team.tours[idx].role === role) return;
+    team.tours[idx].role = role;
+    render();
+    writeTeam(team);
+  }
+
+  // Un-records the most recently completed tour (clears its time and
+  // ressenti) so the team can re-run it — the fix for "several tours have
+  // already gone by and there's no way back" once a mistake is noticed.
+  // Only touches the LAST recorded tour, never an earlier one (use the
+  // manual time edit in the table for that) and never a tour mid-run
+  // (cancel-lap already handles that case).
+  function handleUndoLastTour(tid){
+    var team = teamsById[tid];
+    if(!team || team.running) return;
+    var idx = currentTourIndex(team);
+    var lastDoneIdx = (idx === -1 ? team.tours.length : idx) - 1;
+    if(lastDoneIdx < 0) return;
+    team.tours[lastDoneIdx].time = null;
+    team.tours[lastDoneIdx].ressenti = null;
+    if(team.pending === lastDoneIdx) team.pending = null;
+    if(editingTour && editingTour.teamId===tid) editingTour = null;
+    render();
+    writeTeam(team);
+    showToast("Dernier tour annulé — à refaire.");
+  }
+
+  // Reprend le chrono du dernier tour enregistré, en continuant depuis le
+  // temps déjà couru — pour le cas où le chrono a été arrêté par erreur
+  // (trop tôt) alors que le coureur n'avait pas fini : contrairement à
+  // handleUndoLastTour, qui remet tout à zéro, ceci conserve le temps déjà
+  // écoulé et relance le chrono à partir de là.
+  function handleResumeLastTour(tid){
+    var team = teamsById[tid];
+    if(!team || team.running) return;
+    var idx = currentTourIndex(team);
+    var lastDoneIdx = (idx === -1 ? team.tours.length : idx) - 1;
+    if(lastDoneIdx < 0) return;
+    var prevTime = team.tours[lastDoneIdx].time;
+    if(prevTime == null) return;
+    team.tours[lastDoneIdx].time = null;
+    if(team.pending === lastDoneIdx) team.pending = null;
+    if(editingTour && editingTour.teamId===tid) editingTour = null;
+    team.running = true;
+    team.lastLapTs = Date.now() - prevTime;
+    render();
+    writeTeam(team);
+    showToast("Chrono repris à " + fmtTime(prevTime) + " — il continue là où il s'était arrêté.");
+  }
+
+  function handleResetTeam(tid){
+    var team = teamsById[tid];
+    if(!team) return;
+    var s = groupSettings(groupsById[team.groupId]);
+    team.tours = makeTours(s.toursPerTeam, team.members.length, s.lapsPerTurn, s.level2Tours);
+    team.running = false; team.lastLapTs = null; team.pending = null;
+    if(editingTour && editingTour.teamId===tid) editingTour = null;
+    render();
+    writeTeam(team);
+  }
+
+  function handleDisbandTeam(tid){
+    delete teamsById[tid];
+    if(editingTour && editingTour.teamId===tid) editingTour = null;
+    render();
+    deleteTeamDoc(tid);
+    showToast("Équipe défaite — les élèves sont de retour dans la liste.");
+  }
+
+  function handleSetRessenti(tid, tourIdx, val){
+    var team = teamsById[tid];
+    if(!team) return;
+    var t = team.tours[tourIdx];
+    if(t.time==null) return;
+    t.ressenti = (t.ressenti===val) ? null : val;
+    if(team.pending === tourIdx) team.pending = null;
+    render();
+    writeTeam(team);
+  }
+
+  function resizeAllTours(g, n, lapsPerTurn, level2Tours){
+    var gsPrev = groupSettings(g);
+    n = Math.max(1, Math.min(200, n|0));
+    lapsPerTurn = Math.max(1, lapsPerTurn|0 || gsPrev.lapsPerTurn || 1);
+    level2Tours = Math.max(0, level2Tours!=null ? (level2Tours|0) : (gsPrev.level2Tours|0 || 0));
+    var total = n * lapsPerTurn + level2Tours;
+    teamsForGroup(g.id).forEach(function(team){
+      if(team.kind) return; // binômes d'évaluation — hors du champ des relais
+      var old = team.tours;
+      var fresh = makeTours(n, team.members.length, lapsPerTurn, level2Tours);
+      for(var i=0;i<Math.min(old.length, total);i++){ fresh[i] = old[i]; }
+      team.tours = fresh;
+      team.running = false; team.lastLapTs = null; team.pending = null;
+      writeTeam(team);
+    });
+    g.toursPerTeam = n;
+    g.lapsPerTurn = lapsPerTurn;
+    g.level2Tours = level2Tours;
+    writeGroup(g);
+  }
+
+  function nextGroupName(){
+    var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var names = allGroupsSorted().map(function(g){ return g.name; });
+    for(var i=0;i<letters.length;i++){
+      var name = "Groupe "+letters[i];
+      if(names.indexOf(name)===-1) return name;
+    }
+    return "Groupe "+(names.length+1);
+  }
+
+  // Snapshot of a single group's current session (used for both the "Séance
+  // en cours" Word export and history archiving). Kept as a `groups` array
+  // of length 1 for compatibility with older bundled history entries that
+  // held several groups in one snapshot — buildSessionXml/sessionRowsFor
+  // just iterate whatever `groups` array is present, old or new.
+  function groupSessionSnapshot(g){
+    var s = groupSettings(g);
+    return {
+      groupId: g.id, mode: s.mode,
+      sessionDate: s.sessionDate, classLabel: s.classLabel, objectiveName: s.objectiveName,
+      route: s.route, distanceM: s.distanceM, toursPerTeam: s.toursPerTeam, lapsPerTurn: s.lapsPerTurn,
+      level2Tours: s.level2Tours, level2DistanceM: s.level2DistanceM, dist3000TargetM: s.dist3000TargetM, order: Date.now(),
+      groups: [{ name: g.name, roster: g.roster.slice(), teams: teamsForGroup(g.id).map(function(t){
+        return t.kind
+          ? { kind: t.kind, members: t.members.slice(), laps: JSON.parse(JSON.stringify(t.laps||[])), finished: !!t.finished, finishedElapsedMs: t.finishedElapsedMs }
+          : { members: t.members.slice(), tours: JSON.parse(JSON.stringify(t.tours)) };
+      }) }]
+    };
+  }
+
+  function archiveCurrent(g){ addHistory(groupSessionSnapshot(g)); }
+
+  // ---------- no-login multi-device merge (export one iPad's data, import it on another) ----------
+
+  function exportDeviceData(){
+    var payload = {
+      kind: "endurance-eps-export",
+      version: 2,
+      exportedAt: new Date().toISOString(),
+      deviceId: local.deviceId,
+      groups: allGroupsSorted(),
+      teams: Object.keys(teamsById).map(function(id){ return teamsById[id]; }),
+      history: historyList
+    };
+    var json = JSON.stringify(payload, null, 2);
+    var filename = "endurance-"+todayIso()+"-"+local.deviceId+".json";
+    var doSave = function(handle){
+      if(!handle){
+        // No downloads capability (or not granted): fall back to a plain data: link the user can long-press / share.
+        var a = document.createElement("a");
+        a.href = "data:application/json;charset=utf-8," + encodeURIComponent(json);
+        a.download = filename;
+        document.body.appendChild(a); a.click(); a.remove();
+        showToast("Sauvegarde enregistrée.");
+        return;
+      }
+      handle.save({ filename: filename, data: json })
+        .then(function(){ showToast("Sauvegarde enregistrée."); })
+        .catch(function(err){
+          if(err && err.code === "declined") return;
+          showToast("Export impossible (" + ((err && err.code) || "erreur") + ").");
+        });
+    };
+    if(window.claude && window.claude.use){ claude.use("downloads").then(doSave).catch(function(){ doSave(null); }); }
+    else { doSave(null); }
+  }
+
+  function uniqueGroupName(name, existingNames){
+    if(existingNames.indexOf(name) === -1) return name;
+    var i = 2;
+    while(existingNames.indexOf(name + " (" + i + ")") !== -1) i++;
+    return name + " (" + i + ")";
+  }
+
+  function importOneExport(payload){
+    if(!payload || payload.kind !== "endurance-eps-export" || !Array.isArray(payload.groups)){
+      throw new Error("format non reconnu");
+    }
+    var existingGroupIds = {}; Object.keys(groupsById).forEach(function(id){ existingGroupIds[id]=true; });
+    var existingTeamIds = {}; Object.keys(teamsById).forEach(function(id){ existingTeamIds[id]=true; });
+    var existingNames = allGroupsSorted().map(function(g){ return g.name; });
+    var groupIdRemap = {};
+    var addedGroups = 0, addedTeams = 0, addedHistory = 0;
+    // Older exports (before groups had independent settings) carried one
+    // shared top-level `cfg` — use it as a fallback for any incoming group
+    // that doesn't have its own settings yet, same as the live migration.
+    var legacySrc = payload.cfg || {};
+    var defaults = defaultCfg();
+
+    (payload.groups||[]).forEach(function(g){
+      if(existingGroupIds[g.id]){ groupIdRemap[g.id] = g.id; return; } // already have this exact group (e.g. re-importing your own file)
+      var newId = g.id;
+      var newName = uniqueGroupName(g.name, existingNames);
+      existingNames.push(newName);
+      var fresh = { id:newId, name:newName, roster:(g.roster||[]).slice(), order: (allGroupsSorted().length+1) };
+      ["mode","classLabel","objectiveName","sessionDate","route","distanceM","toursPerTeam","lapsPerTurn","level2Tours","level2DistanceM","targetTime","dist3000TargetM"].forEach(function(k){
+        fresh[k] = g[k] != null ? g[k] : (legacySrc[k] != null ? legacySrc[k] : defaults[k]);
+      });
+      groupsById[newId] = fresh;
+      groupIdRemap[g.id] = newId;
+      writeGroup(fresh);
+      addedGroups++;
+    });
+
+    (payload.teams||[]).forEach(function(t){
+      if(existingTeamIds[t.id]) return; // already have this exact team
+      var mappedGroupId = groupIdRemap[t.groupId] || t.groupId;
+      var fresh = Object.assign({}, t, { groupId: mappedGroupId });
+      teamsById[fresh.id] = fresh;
+      writeTeam(fresh);
+      addedTeams++;
+    });
+
+    (payload.history||[]).forEach(function(h){
+      addHistory(h);
+      addedHistory++;
+    });
+
+    return { addedGroups: addedGroups, addedTeams: addedTeams, addedHistory: addedHistory };
+  }
+
+  function importDeviceDataFiles(fileList){
+    var files = Array.prototype.slice.call(fileList||[]);
+    if(files.length===0) return;
+    var totalG=0, totalT=0, totalH=0, failed=[];
+    var readNext = function(i){
+      if(i>=files.length){
+        ensureActiveGroup(); render();
+        var parts = [];
+        if(totalG) parts.push(totalG+" groupe(s)");
+        if(totalT) parts.push(totalT+" équipe(s)");
+        if(totalH) parts.push(totalH+" séance(s) archivée(s)");
+        var msg = parts.length ? ("Sauvegarde restaurée : " + parts.join(", ") + ".") : "Rien de nouveau à récupérer (déjà à jour).";
+        if(failed.length) msg += " (" + failed.length + " fichier(s) illisible(s))";
+        showToast(msg);
+        return;
+      }
+      var file = files[i];
+      var reader = new FileReader();
+      reader.onload = function(){
+        try{
+          var payload = JSON.parse(String(reader.result));
+          var res = importOneExport(payload);
+          totalG += res.addedGroups; totalT += res.addedTeams; totalH += res.addedHistory;
+        }catch(e){ failed.push(file.name); }
+        readNext(i+1);
+      };
+      reader.onerror = function(){ failed.push(file.name); readNext(i+1); };
+      reader.readAsText(file);
+    };
+    readNext(0);
+  }
+
+  document.addEventListener("click", function(e){
+   try{
+    var t = e.target.closest("[data-action]");
+    if(!t) return;
+    var action = t.getAttribute("data-action");
+    var tid = t.getAttribute("data-team");
+    var g = activeGroupMeta();
+
+    var NEEDS_GROUP = { "remove-group":1, "toggle-name":1, "clear-selection":1, "form-team":1, "remove-name":1, "reset-group":1, "add-names":1, "reshuffle-teams":1, "new-session":1, "archive-restart":1, "tours-inc":1, "tours-dec":1 };
+    if(NEEDS_GROUP[action] && !g){
+      showToast("Séance en cours de préparation — réessayez dans un instant.");
+      return;
+    }
+
+    if(action === "set-group"){ local.activeGroupId = t.getAttribute("data-group"); saveLocal(); render(); }
+    else if(action === "add-group"){
+      var ng = createGroup(nextGroupName(), []);
+      local.activeGroupId = ng.id; saveLocal();
+      render();
+    }
+    else if(action === "remove-group"){
+      if(allGroupsSorted().length<=1){ showToast("Il faut garder au moins un groupe."); return; }
+      var ids = allGroupsSorted().map(function(x){return x.id;});
+      var idx = ids.indexOf(g.id);
+      teamsForGroup(g.id).forEach(function(team){ delete teamsById[team.id]; deleteTeamDoc(team.id); });
+      delete groupsById[g.id];
+      deleteGroupDoc(g.id);
+      local.activeGroupId = ids[Math.max(0,idx-1)===idx?0:Math.max(0,idx-1)] === g.id ? null : ids[Math.max(0,idx-1)];
+      ensureActiveGroup();
+      saveLocal(); render();
+    }
+    else if(action === "toggle-name"){
+      var name = t.getAttribute("data-name");
+      var sel = selection[g.id] || (selection[g.id]=[]);
+      var pos = sel.indexOf(name);
+      var maxSel = maxTeamSize(g);
+      if(pos !== -1){ sel.splice(pos,1); }
+      else if(sel.length < maxSel){ sel.push(name); }
+      else { showToast(maxSel===2 ? "Un binôme compte 2 élèves (coureur + observateur)." : "Une équipe compte au maximum 3 élèves."); }
+      renderPicker();
+    }
+    else if(action === "clear-selection"){ selection[g.id] = []; renderPicker(); }
+    else if(action === "form-team"){
+      var sel2 = selection[g.id] || [];
+      if(sel2.length<2) return;
+      createTeam(g.id, sel2);
+      selection[g.id] = [];
+      render();
+    }
+    else if(action === "remove-name"){
+      var nm = t.getAttribute("data-name");
+      g.roster = g.roster.filter(function(x){ return x!==nm; });
+      writeGroup(g);
+      var gsetRm = groupSettings(g);
+      teamsForGroup(g.id).forEach(function(team){
+        if(team.members.indexOf(nm)===-1) return;
+        var newMembers = team.members.filter(function(x){ return x!==nm; });
+        if(newMembers.length < 2){ delete teamsById[team.id]; deleteTeamDoc(team.id); }
+        else { team.members = newMembers; team.tours = makeTours(gsetRm.toursPerTeam, newMembers.length, gsetRm.lapsPerTurn, gsetRm.level2Tours); team.running=false; team.lastLapTs=null; team.pending=null; writeTeam(team); }
+      });
+      var s = selection[g.id]; if(s){ selection[g.id] = s.filter(function(x){return x!==nm;}); }
+      render();
+    }
+    else if(action === "big-play"){ handleBigPlay(tid); }
+    else if(action === "select-runner"){ handleSelectRunner(tid, t.getAttribute("data-role")); }
+    else if(action === "undo-last-tour"){ handleUndoLastTour(tid); }
+    else if(action === "resume-last-tour"){ handleResumeLastTour(tid); }
+    else if(action === "eval-swap-roles"){ handleEvalSwapRoles(tid); }
+    else if(action === "eval-start"){ handleEvalStart(tid); }
+    else if(action === "eval-lap"){ handleEvalLap(tid); }
+    else if(action === "eval-stop"){ handleEvalStop(tid); }
+    else if(action === "eval-undo-lap"){ handleEvalUndoLap(tid); }
+    else if(action === "eval-reset"){ handleEvalReset(tid); }
+    else if(action === "reset-team"){ handleResetTeam(tid); }
+    else if(action === "disband-team"){ handleDisbandTeam(tid); }
+    else if(action === "set-ressenti"){ handleSetRessenti(tid, parseInt(t.getAttribute("data-tour"),10), parseInt(t.getAttribute("data-value"),10)); }
+    else if(action === "toggle-detail"){ openDetails[tid] = !openDetails[tid]; render(); }
+    else if(action === "start-time-edit"){
+      editingTour = { teamId: tid, tourIndex: parseInt(t.getAttribute("data-tour"),10) };
+      render();
+      var editInput = document.querySelector(".time-edit-input");
+      if(editInput){ editInput.focus(); editInput.select(); }
+    }
+    else if(action === "cancel-time-edit"){ editingTour = null; render(); }
+    else if(action === "save-time-edit"){
+      var editTeam = teamsById[tid];
+      var editIdx = parseInt(t.getAttribute("data-tour"),10);
+      var editInputEl = t.closest("tr") ? t.closest("tr").querySelector(".time-edit-input") : document.querySelector(".time-edit-input");
+      var newMs = editInputEl ? parseTimeInput(editInputEl.value) : null;
+      if(editTeam && newMs != null){
+        editTeam.tours[editIdx].time = newMs;
+        editingTour = null;
+        render();
+        writeTeam(editTeam);
+        showToast("Temps corrigé.");
+      } else {
+        showToast("Format invalide — utilisez mm:ss ou mm:ss.d (ex. 01:23.4).");
+      }
+    }
+    else if(action === "toggle-theme"){
+      var order=[null,"dark","light"]; local.theme = order[(order.indexOf(local.theme)+1)%order.length];
+      saveLocal(); applyTheme();
+    }
+    else if(action === "toggle-settings"){
+      var panel = document.getElementById("settingsPanel");
+      panel.hidden = !panel.hidden;
+    }
+    else if(action === "print"){ window.print(); }
+    else if(action === "reset-group"){
+      editingTour = null;
+      var gsetRg = groupSettings(g);
+      teamsForGroup(g.id).forEach(function(team){
+        if(team.kind){
+          team.running=false; team.startedAt=null; team.laps=[]; team.finished=false; team.finishedElapsedMs=null;
+        } else {
+          team.tours = makeTours(gsetRg.toursPerTeam, team.members.length, gsetRg.lapsPerTurn, gsetRg.level2Tours); team.running=false; team.lastLapTs=null; team.pending=null;
+        }
+        writeTeam(team);
+      });
+      render();
+    }
+    else if(action === "new-session"){
+      editingTour = null;
+      archiveCurrent(g);
+      var gsetNs = groupSettings(g);
+      teamsForGroup(g.id).forEach(function(team){
+        if(team.kind){
+          team.running=false; team.startedAt=null; team.laps=[]; team.finished=false; team.finishedElapsedMs=null;
+        } else {
+          team.tours = makeTours(gsetNs.toursPerTeam, team.members.length, gsetNs.lapsPerTurn, gsetNs.level2Tours); team.running=false; team.lastLapTs=null; team.pending=null;
+        }
+        writeTeam(team);
+      });
+      g.sessionDate = todayIso(); writeGroup(g);
+      render();
+      showToast("Séance archivée. Nouvelle séance prête avec les mêmes équipes.");
+    }
+    else if(action === "reshuffle-teams"){
+      editingTour = null;
+      archiveCurrent(g);
+      teamsForGroup(g.id).forEach(function(team){ delete teamsById[team.id]; deleteTeamDoc(team.id); });
+      selection[g.id] = [];
+      g.sessionDate = todayIso(); writeGroup(g);
+      render();
+      showToast("Équipes réinitialisées — recomposez les duos ou trios avec la même liste.");
+    }
+    else if(action === "tours-inc"){ var gsInc=groupSettings(g); resizeAllTours(g, gsInc.toursPerTeam+1, gsInc.lapsPerTurn, gsInc.level2Tours); render(); }
+    else if(action === "tours-dec"){ var gsDec=groupSettings(g); resizeAllTours(g, gsDec.toursPerTeam-1, gsDec.lapsPerTurn, gsDec.level2Tours); render(); }
+    else if(action === "cancel-lap"){
+      var cancelTeam = teamsById[tid];
+      if(cancelTeam && cancelTeam.running){
+        cancelTeam.running = false; cancelTeam.lastLapTs = null;
+        writeTeam(cancelTeam);
+        render();
+        showToast("Chrono annulé — relancez le bon tour.");
+      }
+    }
+    else if(action === "archive-restart"){
+      editingTour = null;
+      archiveCurrent(g);
+      teamsForGroup(g.id).forEach(function(team){ deleteTeamDoc(team.id); delete teamsById[team.id]; });
+      g.roster = [];
+      g.sessionDate = todayIso();
+      writeGroup(g);
+      selection[g.id] = [];
+      render();
+      showToast("Groupe « " + g.name + " » archivé et remis à zéro (liste d'élèves effacée).");
+    }
+    else if(action === "export-word"){ exportWord(); }
+    else if(action === "export-pdf"){ exportPdf(); }
+    else if(action === "export-device-data"){ exportDeviceData(); }
+    else if(action === "trigger-import-device-data"){ document.getElementById("importFileInput").click(); }
+    else if(action === "add-names"){
+      var ta = document.getElementById("fBulkNames");
+      if(!ta){ showToast("Erreur interne (zone de texte introuvable)."); return; }
+      if(!Array.isArray(g.roster)) g.roster = [];
+      var names = ta.value.split(/[\n,]+/).map(function(s){return s.trim();}).filter(Boolean);
+      if(names.length===0){ showToast("Tapez au moins un prénom avant d'ajouter."); return; }
+      names.forEach(function(n){ if(g.roster.indexOf(n)===-1) g.roster.push(n); });
+      writeGroup(g);
+      ta.value = "";
+      render();
+      showToast(names.length>1 ? (names.length+" prénoms ajoutés.") : "Prénom ajouté.");
+    }
+    else if(action === "open-focus"){
+      var fcOpen = activeFocusConfig();
+      local.focusMode = (fcOpen.teams && fcOpen.teams.length) ? "active" : "setup";
+      saveLocal(); render();
+    }
+    else if(action === "close-focus"){ local.focusMode = null; saveLocal(); render(); }
+    else if(action === "focus-back-setup"){ local.focusMode = "setup"; saveLocal(); render(); }
+    else if(action === "toggle-focus-team"){
+      var teamId = t.getAttribute("data-team");
+      var fcToggle = activeFocusConfig();
+      var arr = fcToggle.teams || (fcToggle.teams=[]);
+      var pos2 = arr.findIndex(function(r){ return r.teamId===teamId; });
+      if(pos2!==-1){ arr.splice(pos2,1); }
+      else if(arr.length<3){ arr.push({teamId:teamId}); }
+      else { showToast("3 équipes maximum par écran. Utilisez « Vider la sélection » si rien n'est coché ci-dessus."); }
+      saveLocal(); renderFocusOverlay();
+    }
+    else if(action === "clear-focus-selection"){
+      var fcClear = activeFocusConfig();
+      fcClear.teams = [];
+      saveLocal(); renderFocusOverlay();
+    }
+    else if(action === "start-focus"){
+      var fcStart = activeFocusConfig();
+      if(!fcStart.teams || fcStart.teams.length===0) return;
+      local.focusMode = "active"; saveLocal(); render();
+    }
+    else if(action === "toggle-face-to-face"){
+      activeFocusConfig().faceToFace = !activeFocusConfig().faceToFace;
+      saveLocal(); renderFocusOverlay();
+    }
+    else if(action === "flip-face-to-face"){
+      activeFocusConfig().flipFirst = !activeFocusConfig().flipFirst;
+      saveLocal(); renderFocusOverlay();
+    }
+   } catch(clickErr){
+     console.error("Endurance EPS — erreur sur l'action:", clickErr);
+     showToast("Erreur (" + (clickErr && clickErr.message ? clickErr.message : "inconnue") + ") — merci de me le signaler.");
+   }
+  });
+
+  // Manual time-edit inputs are recreated on every render, so their
+  // Enter/Escape handling is delegated at the document level rather than
+  // attached per-input.
+  document.addEventListener("keydown", function(e){
+    if(!e.target || !e.target.classList || !e.target.classList.contains("time-edit-input")) return;
+    if(e.key === "Enter"){
+      e.preventDefault();
+      var saveBtn = e.target.closest("tr") ? e.target.closest("tr").querySelector('[data-action="save-time-edit"]') : null;
+      if(saveBtn) saveBtn.click();
+    } else if(e.key === "Escape"){
+      e.preventDefault();
+      editingTour = null; render();
+    }
+  });
+
+  document.getElementById("importFileInput").addEventListener("change", function(){
+    importDeviceDataFiles(this.files);
+    this.value = "";
+  });
+  document.getElementById("classLabel").addEventListener("input", function(){
+    var g = activeGroupMeta(); if(!g) return;
+    g.classLabel = this.value;
+    document.getElementById("fClass").value = this.value;
+    debounce("group-"+g.id, function(){ writeGroup(g); });
+  });
+  document.getElementById("fClass").addEventListener("input", function(){
+    var g = activeGroupMeta(); if(!g) return;
+    g.classLabel = this.value;
+    document.getElementById("classLabel").value = this.value;
+    debounce("group-"+g.id, function(){ writeGroup(g); });
+  });
+  document.getElementById("fDate").addEventListener("change", function(){
+    var g = activeGroupMeta(); if(!g) return;
+    g.sessionDate = this.value || todayIso();
+    writeGroup(g); render();
+  });
+  document.getElementById("objName").addEventListener("input", function(){
+    var g = activeGroupMeta(); if(!g) return;
+    g.objectiveName = this.value;
+    document.getElementById("fObjName").value = this.value;
+    debounce("group-"+g.id, function(){ writeGroup(g); });
+  });
+  document.getElementById("fObjName").addEventListener("input", function(){
+    var g = activeGroupMeta(); if(!g) return;
+    g.objectiveName = this.value;
+    document.getElementById("objName").value = this.value;
+    debounce("group-"+g.id, function(){ writeGroup(g); });
+  });
+  document.getElementById("fRoute").addEventListener("input", function(){
+    var g = activeGroupMeta(); if(!g) return;
+    g.route = this.value;
+    document.getElementById("fRouteCooper").value = this.value;
+    document.getElementById("fRoute3000").value = this.value;
+    renderObjective();
+    debounce("group-"+g.id, function(){ writeGroup(g); });
+  });
+  document.getElementById("fDist").addEventListener("input", function(){
+    var g = activeGroupMeta(); if(!g) return;
+    g.distanceM = Math.max(1, parseInt(this.value,10)||1);
+    document.getElementById("fDistCooper").value = g.distanceM;
+    document.getElementById("fDist3000Lap").value = g.distanceM;
+    renderObjective();
+    debounce("group-"+g.id, function(){ writeGroup(g); });
+  });
+  document.getElementById("fTours").addEventListener("change", function(){
+    var g = activeGroupMeta(); if(!g) return;
+    var s = groupSettings(g);
+    resizeAllTours(g, parseInt(this.value,10)||1, s.lapsPerTurn, s.level2Tours); render();
+  });
+  document.getElementById("fLapsPerTurn").addEventListener("change", function(){
+    var g = activeGroupMeta(); if(!g) return;
+    var s = groupSettings(g);
+    var lpt = Math.max(1, parseInt(this.value,10)||1);
+    resizeAllTours(g, s.toursPerTeam, lpt, s.level2Tours); render();
+  });
+  document.getElementById("fLevel2Tours").addEventListener("change", function(){
+    var g = activeGroupMeta(); if(!g) return;
+    var s = groupSettings(g);
+    var lvl2 = Math.max(0, parseInt(this.value,10)||0);
+    resizeAllTours(g, s.toursPerTeam, s.lapsPerTurn, lvl2); render();
+  });
+  document.getElementById("fLevel2Dist").addEventListener("input", function(){
+    var g = activeGroupMeta(); if(!g) return;
+    g.level2DistanceM = Math.max(1, parseInt(this.value,10)||1); renderObjective();
+    debounce("group-"+g.id, function(){ writeGroup(g); });
+  });
+  document.getElementById("fTarget").addEventListener("input", function(){
+    var g = activeGroupMeta(); if(!g) return;
+    g.targetTime = this.value; renderObjective();
+    debounce("group-"+g.id, function(){ writeGroup(g); });
+  });
+  document.getElementById("fMode").addEventListener("change", function(){
+    var g = activeGroupMeta(); if(!g) return;
+    g.mode = this.value;
+    writeGroup(g); render();
+  });
+  document.getElementById("fRouteCooper").addEventListener("input", function(){
+    var g = activeGroupMeta(); if(!g) return;
+    g.route = this.value; document.getElementById("fRoute").value = this.value; document.getElementById("fRoute3000").value = this.value; renderObjective();
+    debounce("group-"+g.id, function(){ writeGroup(g); });
+  });
+  document.getElementById("fDistCooper").addEventListener("input", function(){
+    var g = activeGroupMeta(); if(!g) return;
+    g.distanceM = Math.max(1, parseInt(this.value,10)||1);
+    document.getElementById("fDist").value = g.distanceM;
+    document.getElementById("fDist3000Lap").value = g.distanceM;
+    renderObjective();
+    debounce("group-"+g.id, function(){ writeGroup(g); });
+  });
+  document.getElementById("fRoute3000").addEventListener("input", function(){
+    var g = activeGroupMeta(); if(!g) return;
+    g.route = this.value; document.getElementById("fRoute").value = this.value; document.getElementById("fRouteCooper").value = this.value; renderObjective();
+    debounce("group-"+g.id, function(){ writeGroup(g); });
+  });
+  document.getElementById("fDist3000Lap").addEventListener("input", function(){
+    var g = activeGroupMeta(); if(!g) return;
+    g.distanceM = Math.max(1, parseInt(this.value,10)||1);
+    document.getElementById("fDist").value = g.distanceM;
+    document.getElementById("fDistCooper").value = g.distanceM;
+    renderObjective();
+    debounce("group-"+g.id, function(){ writeGroup(g); });
+  });
+  document.getElementById("fDist3000Target").addEventListener("input", function(){
+    var g = activeGroupMeta(); if(!g) return;
+    g.dist3000TargetM = Math.max(1, parseInt(this.value,10)||1); renderObjective(); render();
+    debounce("group-"+g.id, function(){ writeGroup(g); });
+  });
+  document.getElementById("fGroupName").addEventListener("input", function(){
+    var g = activeGroupMeta(); if(!g) return;
+    g.name = this.value || g.name;
+    document.getElementById("settingsGroupName").textContent = g.name;
+    document.getElementById("rosterGroupName").textContent = g.name;
+    renderTabs();
+    debounce("group-"+g.id, function(){ writeGroup(g); });
+  });
+
+  if(window.matchMedia){
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function(){ if(!local.theme) applyTheme(); });
+  }
+
+  setInterval(function(){
+    var keys = Object.keys(liveButtons);
+    if(keys.length===0) return;
+    var now = Date.now();
+    var needsRender = false;
+    keys.forEach(function(k){
+      var entry = liveButtons[k];
+      if(!entry) return;
+      if(entry.kind === "eval"){
+        var team = teamsById[entry.teamId];
+        if(!team || !team.running) return;
+        var elapsed = now - team.startedAt;
+        if(entry.el && entry.el.isConnected){ entry.el.textContent = fmtTime(elapsed); }
+        if(entry.remainingEl && entry.remainingEl.isConnected){ entry.remainingEl.textContent = fmtTime(Math.max(0, entry.targetMs - elapsed)); }
+        // Test 12 minutes : arrêt automatique du chrono dès que le temps
+        // imparti est écoulé (le test 3000 m s'arrête, lui, au moment du
+        // passage qui atteint la distance — voir handleEvalLap).
+        if(entry.targetMs != null && elapsed >= entry.targetMs){
+          team.running = false; team.finished = true; team.finishedElapsedMs = entry.targetMs;
+          writeTeam(team);
+          needsRender = true;
+        }
+      } else if(entry.el && entry.el.isConnected){
+        entry.el.textContent = fmtTime(now - entry.since);
+      }
+    });
+    if(needsRender) render();
+  }, 100);
+
+  // ---------- Word export ----------
+
+  function xmlEscape(s){
+    return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+  function wp(text, opts){
+    opts = opts || {};
+    var rpr = '<w:rPr>'+(opts.bold?'<w:b/>':'')+'<w:sz w:val="'+(opts.size||22)+'"/>'+(opts.color?'<w:color w:val="'+opts.color+'"/>':'')+'</w:rPr>';
+    return '<w:p>'+(opts.spacingBefore?('<w:pPr><w:spacing w:before="'+opts.spacingBefore+'"/></w:pPr>'):'')+'<w:r>'+rpr+'<w:t xml:space="preserve">'+xmlEscape(text)+'</w:t></w:r></w:p>';
+  }
+  function wCell(text, opts){
+    opts = opts || {};
+    return '<w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/>'+(opts.shade?('<w:shd w:val="clear" w:fill="'+opts.shade+'"/>'):'')+'</w:tcPr>'+
+      '<w:p><w:r><w:rPr><w:sz w:val="18"/>'+(opts.bold?'<w:b/>':'')+'</w:rPr><w:t xml:space="preserve">'+xmlEscape(text)+'</w:t></w:r></w:p></w:tc>';
+  }
+  function wTable(headers, rows){
+    var borders = '<w:tblBorders>'+
+      ['top','left','bottom','right','insideH','insideV'].map(function(edge){
+        return '<w:'+edge+' w:val="single" w:sz="4" w:space="0" w:color="CBD5C9"/>';
+      }).join('')+'</w:tblBorders>';
+    var head = '<w:tr>'+headers.map(function(h){ return wCell(h,{bold:true, shade:"EAEEE4"}); }).join('')+'</w:tr>';
+    var body = rows.map(function(r){ return '<w:tr>'+r.map(function(c){ return wCell(c); }).join('')+'</w:tr>'; }).join('');
+    return '<w:tbl><w:tblPr><w:tblW w:w="0" w:type="auto"/>'+borders+'</w:tblPr>'+head+body+'</w:tbl>';
+  }
+
+  function sessionRowsFor(groups, sessSettings){
+    return groups.map(function(g){
+      var rows = [];
+      g.teams.forEach(function(team, ti){
+        if(team.kind) return; // équipes d'évaluation — voir evalRowsFor
+        team.tours.forEach(function(t, i){
+          var name = team.members[t.role];
+          var sp = speedKmh(tourDistance(sessSettings, i), t.time);
+          rows.push([
+            (team.members.length===3?"Trio ":"Duo ")+(ti+1), (i+1)+"", name||"",
+            t.time!=null ? fmtTime(t.time) : "–",
+            sp!=null ? sp.toFixed(1)+" km/h" : "–",
+            t.ressenti!=null ? RESSENTI[t.ressenti].label : "–"
+          ]);
+        });
+      });
+      return { name: g.name, rows: rows };
+    });
+  }
+
+  // Une ligne par binôme d'évaluation (test 12' / test 3000 m) — résumé
+  // uniquement (le détail passage par passage reste consultable dans
+  // l'application, sur l'écran du binôme concerné).
+  function evalRowsFor(groups, sessSettings){
+    return groups.map(function(g){
+      var rows = [];
+      g.teams.forEach(function(team){
+        if(!team.kind) return;
+        var laps = team.laps || [];
+        var distanceM = sessSettings.distanceM || 0;
+        var totalM = laps.length * distanceM;
+        var isCooper = team.kind === "cooper";
+        var resultat = !team.finished
+          ? "Non terminé"
+          : (isCooper ? (totalM + " m en 12:00") : (totalM + " m en " + fmtTime(team.finishedElapsedMs)));
+        rows.push([
+          isCooper ? "Test 12'" : "Test 3000 m",
+          team.members[0] || "", team.members[1] || "",
+          laps.length+"", resultat
+        ]);
+      });
+      return { name: g.name, rows: rows };
+    });
+  }
+
+  // ---------- séries de vitesse par coureur (pour le graphique de régularité, export PDF) ----------
+  // Même calcul que buildChart()/buildEvalChart() côté écran (une série de
+  // vitesses par rôle, dans l'ordre des passages), mais renvoyé comme
+  // données pures (pas de DOM) pour pouvoir être dessiné dans le PDF.
+  function relayTeamSpeedSeries(team, sessSettings){
+    var series = team.members.map(function(name){ return { name:name, values:[] }; });
+    team.tours.forEach(function(t, i){
+      var sp = speedKmh(tourDistance(sessSettings, i), t.time);
+      if(sp==null) return;
+      series[t.role].values.push(sp);
+    });
+    series.forEach(function(ser, role){ ser.color = PDF_RUN_COLORS[role] || "#3b82f6"; });
+    return series.filter(function(ser){ return ser.values.length>0; });
+  }
+  function evalTeamSpeedSeries(team, sessSettings){
+    var laps = team.laps || [];
+    var speeds = laps.map(function(lap, i){
+      var prevMs = i>0 ? laps[i-1].ms : 0;
+      return speedKmh(sessSettings.distanceM, lap.ms - prevMs);
+    }).filter(function(v){ return v!=null; });
+    if(speeds.length===0) return [];
+    return [{ name: team.members[0]||"Coureur", color: PDF_ACCENT2, values: speeds }];
+  }
+
+  function buildSessionXml(session){
+    var body = [];
+    body.push(wp("Endurance EPS", { bold:true, size:44 }));
+    body.push(wp(session.classLabel || "", { size:24, spacingBefore:60 }));
+    body.push(wp("Séance du " + fmtDateLong(session.sessionDate), { size:22 }));
+    body.push(wp("Objectif : " + (session.objectiveName||""), { size:20, bold:true, spacingBefore:60 }));
+    var sessLpt = Math.max(1, session.lapsPerTurn|0 || 1);
+    var toursLabel = sessLpt>1
+      ? (session.toursPerTeam + " relais × " + sessLpt + " tours (" + (session.toursPerTeam*sessLpt) + " tours/équipe)")
+      : (session.toursPerTeam + " tours/équipe");
+    if(session.level2Tours>0){ toursLabel += " + " + session.level2Tours + " tour" + (session.level2Tours>1?"s":"") + " niveau 2 (" + (session.level2DistanceM||session.distanceM) + " m)"; }
+    if(session.mode === "cooper"){ body.push(wp("Épreuve : évaluation course de 12 minutes — " + session.distanceM + " m/tour", { size:18 })); }
+    else if(session.mode === "dist3000"){ body.push(wp("Épreuve : évaluation 3000 m — " + session.distanceM + " m/tour — objectif " + (session.dist3000TargetM||3000) + " m", { size:18 })); }
+    else { body.push(wp("Parcours : " + (session.route||"") + " — " + session.distanceM + " m/tour — " + toursLabel, { size:18 })); }
+
+    var groupRows = sessionRowsFor(session.groups, session);
+    var groupEvalRows = evalRowsFor(session.groups, session);
+    session.groups.forEach(function(g, gi){
+      body.push(wp(g.name, { bold:true, size:28, spacingBefore:240 }));
+      var relayRows = groupRows[gi] ? groupRows[gi].rows : [];
+      var evalRows = groupEvalRows[gi] ? groupEvalRows[gi].rows : [];
+      if(relayRows.length===0 && evalRows.length===0){ body.push(wp("Aucune donnée.", { size:18 })); }
+      if(relayRows.length>0){ body.push(wTable(["Équipe","Tour","Coureur","Temps","Vitesse","Ressenti"], relayRows)); }
+      if(evalRows.length>0){ body.push(wTable(["Épreuve","Coureur","Observateur","Passages","Résultat"], evalRows)); }
+    });
+    return body.join("");
+  }
+
+  // ---------- minimal in-house ZIP writer (no external library) ----------
+  // Artefacts publiés ne peuvent pas charger de script externe (CDN) — un
+  // <script src="..."> vers jszip/jspdf ne s'exécute jamais une fois publié
+  // ("bibliothèque non chargée"). Les exports Word et PDF sont donc
+  // entièrement autonomes : un mini-générateur de ZIP (stocké, non
+  // compressé — un .docx est un simple conteneur ZIP, la compression n'est
+  // pas obligatoire) et un mini-générateur de PDF, écrits à la main,
+  // fonctionnent même hors-ligne et ne dépendent d'aucune ressource externe.
+
+  var CRC32_TABLE = (function(){
+    var table = [];
+    for(var n=0;n<256;n++){
+      var c = n;
+      for(var k=0;k<8;k++){ c = (c&1) ? (0xEDB88320 ^ (c>>>1)) : (c>>>1); }
+      table[n] = c>>>0;
+    }
+    return table;
+  })();
+  function crc32(binStr){
+    var crc = 0xFFFFFFFF;
+    for(var i=0;i<binStr.length;i++){
+      crc = CRC32_TABLE[(crc ^ binStr.charCodeAt(i)) & 0xFF] ^ (crc >>> 8);
+    }
+    return (crc ^ 0xFFFFFFFF) >>> 0;
+  }
+  // Encode any JS string (incl. accented characters) as a "binary string"
+  // whose char codes are the raw UTF-8 byte values — the classic
+  // encodeURIComponent/unescape round-trip.
+  function utf8BinStr(str){ return unescape(encodeURIComponent(str)); }
+  function binToUint8(bin){
+    var arr = new Uint8Array(bin.length);
+    for(var i=0;i<bin.length;i++){ arr[i] = bin.charCodeAt(i) & 0xFF; }
+    return arr;
+  }
+  function zU16(n){ return String.fromCharCode(n&0xFF, (n>>>8)&0xFF); }
+  function zU32(n){ return String.fromCharCode(n&0xFF, (n>>>8)&0xFF, (n>>>16)&0xFF, (n>>>24)&0xFF); }
+  // files: [{ name: "path/in/zip.xml" (ASCII), data: "<binary string, already UTF-8 encoded>" }]
+  function buildZipStored(files){
+    var localParts = [], centralParts = [], offset = 0;
+    files.forEach(function(f){
+      var crc = crc32(f.data), size = f.data.length, nameLen = f.name.length;
+      var localHeader =
+        zU32(0x04034b50) + zU16(20) + zU16(0) + zU16(0) + zU16(0) + zU16(0) +
+        zU32(crc) + zU32(size) + zU32(size) + zU16(nameLen) + zU16(0) + f.name;
+      var localEntry = localHeader + f.data;
+      localParts.push(localEntry);
+      centralParts.push(
+        zU32(0x02014b50) + zU16(20) + zU16(20) + zU16(0) + zU16(0) + zU16(0) + zU16(0) +
+        zU32(crc) + zU32(size) + zU32(size) + zU16(nameLen) + zU16(0) + zU16(0) +
+        zU16(0) + zU16(0) + zU32(0) + zU32(offset) + f.name
+      );
+      offset += localEntry.length;
+    });
+    var centralDir = centralParts.join("");
+    var eocd = zU32(0x06054b50) + zU16(0) + zU16(0) + zU16(files.length) + zU16(files.length) +
+      zU32(centralDir.length) + zU32(offset) + zU16(0);
+    return localParts.join("") + centralDir + eocd;
+  }
+
+  function exportWord(){
+    var sel = document.getElementById("fExportSession").value;
+    var session;
+    if(sel === "current"){ session = groupSessionSnapshot(activeGroupMeta()); }
+    else {
+      var hid = sel.split(":")[1];
+      session = historyList.find(function(h){ return h.id===hid; });
+    }
+    if(!session) return;
+
+    var bodyXml = buildSessionXml(session);
+    var documentXml =
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+      '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'+
+      '<w:body>'+bodyXml+'<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1080" w:right="1080" w:bottom="1080" w:left="1080"/></w:sectPr></w:body></w:document>';
+
+    var contentTypes =
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+      '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'+
+      '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'+
+      '<Default Extension="xml" ContentType="application/xml"/>'+
+      '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>'+
+      '</Types>';
+    var rootRels =
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+      '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+
+      '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>'+
+      '</Relationships>';
+
+    try{
+      var zipBin = buildZipStored([
+        { name: "[Content_Types].xml", data: utf8BinStr(contentTypes) },
+        { name: "_rels/.rels", data: utf8BinStr(rootRels) },
+        { name: "word/document.xml", data: utf8BinStr(documentXml) }
+      ]);
+      var blob = new Blob([binToUint8(zipBin)], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+      claudeSaveDocx(blob, session);
+    }catch(e){
+      showToast("Erreur lors de la génération du fichier.");
+    }
+  }
+
+  function claudeSaveDocx(blob, session){
+    var filename = "endurance-eps-"+(session.sessionDate||todayIso())+".docx";
+    if(!(window.claude && window.claude.use)){
+      showToast("Export Word indisponible dans cet aperçu.");
+      return;
+    }
+    return claude.use("downloads").then(function(downloads){
+      if(!downloads){ showToast("Export Word indisponible ici."); return; }
+      return downloads.save({ filename: filename, data: blob }).then(function(){
+        showToast("Fichier Word enregistré.");
+      }).catch(function(err){
+        if(err && err.code === "declined"){ return; }
+        showToast("Export annulé ou indisponible.");
+      });
+    });
+  }
+
+  // ---------- PDF export (données seules, pour partage hors de l'outil) ----------
+  // Objectif : un fichier autonome, lisible par n'importe qui (ex. un·e
+  // collègue de mathématiques) sans donner accès à l'outil interactif ni
+  // aux données live partagées — contrairement au fait de partager le lien
+  // de l'artefact, qui montre l'outil complet et ses données en direct.
+  // On réutilise volontairement sessionRowsFor/evalRowsFor (déjà utilisées
+  // pour l'export Word) afin que les deux exports montrent toujours
+  // exactement les mêmes chiffres.
+
+  function pdfEpreuveLine(session){
+    var sessLpt = Math.max(1, session.lapsPerTurn|0 || 1);
+    var toursLabel = sessLpt>1
+      ? (session.toursPerTeam + " relais × " + sessLpt + " tours (" + (session.toursPerTeam*sessLpt) + " tours/équipe)")
+      : (session.toursPerTeam + " tours/équipe");
+    if(session.level2Tours>0){ toursLabel += " + " + session.level2Tours + " tour" + (session.level2Tours>1?"s":"") + " niveau 2 (" + (session.level2DistanceM||session.distanceM) + " m)"; }
+    if(session.mode === "cooper") return "Épreuve : évaluation course de 12 minutes — " + session.distanceM + " m/tour";
+    if(session.mode === "dist3000") return "Épreuve : évaluation 3000 m — " + session.distanceM + " m/tour — objectif " + (session.dist3000TargetM||3000) + " m";
+    return "Parcours : " + (session.route||"") + " — " + session.distanceM + " m/tour — " + toursLabel;
+  }
+
+  // ---------- minimal in-house PDF writer (no external library) ----------
+  // Police monospace (Courier, standard PDF — aucune police à intégrer) :
+  // chaque caractère a exactement la même largeur, ce qui rend la mise en
+  // colonnes des tableaux triviale (comptage de caractères) sans avoir à
+  // embarquer de table de largeurs de police.
+  function pdfCharByte(code){
+    if(code>=0x20 && code<=0x7E) return code;         // ASCII imprimable
+    if(code>=0xA0 && code<=0xFF) return code;         // Latin-1 = WinAnsi sur cette plage
+    if(code===0x2013) return 0x96;                     // – en dash
+    if(code===0x2014) return 0x97;                     // — em dash
+    if(code===0x2018) return 0x91; if(code===0x2019) return 0x92; // ' '
+    if(code===0x201C) return 0x93; if(code===0x201D) return 0x94; // " "
+    if(code===0x2026) return 0x85;                     // …
+    if(code===0x0152) return 0x8C; if(code===0x0153) return 0x9C; // Œ œ
+    return 0x3F;                                        // '?'
+  }
+  function pdfHexStr(s){
+    s = String(s==null?"":s);
+    var out = "";
+    for(var i=0;i<s.length;i++){
+      var b = pdfCharByte(s.charCodeAt(i));
+      out += (b<16?"0":"")+b.toString(16);
+    }
+    return "<"+out+">";
+  }
+  function padCell(str, width){
+    str = String(str==null?"":str);
+    if(str.length > width){ return width>1 ? str.slice(0, width-1)+"…" : str.slice(0,width); }
+    var out = str;
+    while(out.length < width) out += " ";
+    return out;
+  }
+  function newPdfDoc(){
+    return { pageWidth:595, pageHeight:842, marginX:40, marginTop:50, marginBottom:50, pages:[], y:0 };
+  }
+  function pdfNewPage(doc){ doc.pages.push([]); doc.y = doc.pageHeight - doc.marginTop; }
+  function pdfCurPage(doc){ return doc.pages[doc.pages.length-1]; }
+  function pdfEnsureSpace(doc, needed){ if(doc.y - needed < doc.marginBottom){ pdfNewPage(doc); } }
+  function pdfText(doc, x, y, str, opts){
+    opts = opts||{};
+    var font = opts.bold ? "/F2" : "/F1";
+    var size = opts.size || 10;
+    // IMPORTANT : le remplissage ("rg"/"g") défini par un pdfRect() (ex. la
+    // bande grisée d'un en-tête de tableau) reste actif dans le flux PDF
+    // tant qu'aucune autre couleur n'est reposée — sans ce "g" explicite ici,
+    // TOUT le texte dessiné après un en-tête de tableau hérite de la couleur
+    // claire de sa bande de fond et devient quasi illisible (texte "trop
+    // clair" signalé). On fixe donc toujours explicitement la couleur du
+    // texte juste avant de le dessiner : noir par défaut, ou opts.color
+    // ("r g b" 0..1, ex. "0.35 0.4 0.32") pour un texte volontairement
+    // atténué (libellés secondaires).
+    var colorOp = opts.color ? (opts.color+" rg") : "0 g";
+    pdfCurPage(doc).push(colorOp+" BT "+font+" "+size+" Tf 1 0 0 1 "+x.toFixed(2)+" "+y.toFixed(2)+" Tm "+pdfHexStr(str)+" Tj ET");
+  }
+  function pdfRect(doc, x, y, w, h, opts){
+    opts = opts||{};
+    var parts = [];
+    if(opts.fill){ parts.push((opts.fillColor||"0.92 0.94 0.89")+" rg"); }
+    if(opts.stroke){ parts.push((opts.strokeColor||"0.75 0.78 0.72")+" RG"); }
+    parts.push(x.toFixed(2)+" "+y.toFixed(2)+" "+w.toFixed(2)+" "+h.toFixed(2)+" re");
+    if(opts.fill && opts.stroke) parts.push("B");
+    else if(opts.fill) parts.push("f");
+    else if(opts.stroke) parts.push("S");
+    pdfCurPage(doc).push(parts.join(" "));
+  }
+  function pdfLine(doc, text, opts){
+    opts = opts||{};
+    var size = opts.size||10;
+    pdfEnsureSpace(doc, size+8);
+    pdfText(doc, doc.marginX, doc.y, text, { bold:opts.bold, size:size });
+    doc.y -= size + (opts.gap!=null ? opts.gap : 6);
+  }
+  function pdfTable(doc, headers, colWidths, rows, opts){
+    opts = opts||{};
+    var fontSize = opts.fontSize||9;
+    var charW = fontSize*0.6;
+    var rowH = fontSize+6;
+    var marginX = doc.marginX;
+    var totalChars = 0; colWidths.forEach(function(w){ totalChars += w; });
+    var totalWidth = totalChars*charW;
+    function colX(i){ var c=0; for(var k=0;k<i;k++) c+=colWidths[k]; return marginX + c*charW; }
+    function drawCells(cells, bold, shade){
+      var top = doc.y;
+      if(shade){ pdfRect(doc, marginX, top-rowH+3, totalWidth, rowH, { fill:true }); }
+      cells.forEach(function(c,i){ pdfText(doc, colX(i)+2, top-rowH+6, padCell(c, colWidths[i]), { bold:bold, size:fontSize }); });
+      pdfRect(doc, marginX, top-rowH+3, totalWidth, rowH, { stroke:true });
+      doc.y -= rowH;
+    }
+    function drawHeaderRow(){ drawCells(headers, true, true); }
+    // Note : drawHeaderRow() ne re-teste jamais l'espace disponible — un
+    // en-tête qui manquerait lui-même de place déclencherait sinon un saut
+    // de page PUIS un second dessin de l'en-tête juste en dessous (l'appel
+    // récursif d'origine le dessinait déjà, et l'appelant continuait sans
+    // "return" et le dessinait une seconde fois). drawRow(), lui, teste
+    // l'espace pour chaque ligne de données et insère un en-tête (via
+    // drawHeaderRow(), sans re-tester) avant de dessiner sa propre ligne.
+    function drawRow(cells, bold, shade){
+      if(doc.y - rowH < doc.marginBottom){
+        pdfNewPage(doc);
+        drawHeaderRow(); // en-tête répété en haut de chaque nouvelle page
+      }
+      drawCells(cells, bold, shade);
+    }
+    if(doc.y - rowH < doc.marginBottom){ pdfNewPage(doc); } // la table elle-même tient sur une page neuve si besoin
+    drawHeaderRow();
+    rows.forEach(function(r){ drawRow(r, false, false); });
+    doc.y -= 12;
+  }
+
+  // ---- vecteur : graphique de régularité (vitesse par passage, par coureur) ----
+  // Reprend le même calcul que buildChart()/buildEvalChart() côté écran
+  // (une série de vitesses par rôle), mais dessiné directement dans le flux
+  // PDF avec les primitives vectorielles de base (lignes, courbes de Bézier
+  // pour les points ronds) — aucune librairie, aucune image embarquée.
+  function hexToPdfRgb(hex){
+    hex = String(hex||"#000000").replace("#","");
+    var r = parseInt(hex.substr(0,2),16)/255;
+    var g = parseInt(hex.substr(2,2),16)/255;
+    var b = parseInt(hex.substr(4,2),16)/255;
+    return r.toFixed(3)+" "+g.toFixed(3)+" "+b.toFixed(3);
+  }
+  var PDF_RUN_COLORS = ["#3b82f6","#c2410c","#7c3aed"]; // var(--run-0..2)
+  var PDF_ACCENT2 = "#2563eb"; // var(--accent-2), utilisé pour les tests 12'/3000m (1 seul coureur)
+  var PDF_GRID_RGB = hexToPdfRgb("#d7ddcd"); // var(--border)
+  var PDF_AXIS_RGB = hexToPdfRgb("#8b9284"); // var(--text-faint)
+
+  function pdfSegment(doc, x1, y1, x2, y2, opts){
+    opts = opts||{};
+    var ops = [];
+    ops.push((opts.color||PDF_GRID_RGB)+" RG");
+    ops.push((opts.width||1).toFixed(2)+" w");
+    ops.push(x1.toFixed(2)+" "+y1.toFixed(2)+" m "+x2.toFixed(2)+" "+y2.toFixed(2)+" l S");
+    pdfCurPage(doc).push(ops.join(" "));
+  }
+  function pdfPolyline(doc, pts, opts){
+    if(!pts || pts.length<2) return;
+    opts = opts||{};
+    var ops = [];
+    ops.push((opts.color||"0 0 0")+" RG");
+    ops.push((opts.width||2).toFixed(2)+" w");
+    ops.push("1 J 1 j"); // bouts et jointures arrondis, comme le tracé écran
+    ops.push(pts[0][0].toFixed(2)+" "+pts[0][1].toFixed(2)+" m");
+    for(var i=1;i<pts.length;i++){ ops.push(pts[i][0].toFixed(2)+" "+pts[i][1].toFixed(2)+" l"); }
+    ops.push("S");
+    pdfCurPage(doc).push(ops.join(" "));
+  }
+  function pdfDot(doc, cx, cy, r, colorRgb){
+    // petit disque plein (4 courbes de Bézier), pour marquer chaque passage sur la courbe.
+    var k = 0.5523 * r;
+    var ops = [colorRgb+" rg"];
+    ops.push((cx-r).toFixed(2)+" "+cy.toFixed(2)+" m");
+    ops.push([(cx-r).toFixed(2),(cy+k).toFixed(2),(cx-k).toFixed(2),(cy+r).toFixed(2),cx.toFixed(2),(cy+r).toFixed(2)].join(" ")+" c");
+    ops.push([(cx+k).toFixed(2),(cy+r).toFixed(2),(cx+r).toFixed(2),(cy+k).toFixed(2),(cx+r).toFixed(2),cy.toFixed(2)].join(" ")+" c");
+    ops.push([(cx+r).toFixed(2),(cy-k).toFixed(2),(cx+k).toFixed(2),(cy-r).toFixed(2),cx.toFixed(2),(cy-r).toFixed(2)].join(" ")+" c");
+    ops.push([(cx-k).toFixed(2),(cy-r).toFixed(2),(cx-r).toFixed(2),(cy-k).toFixed(2),(cx-r).toFixed(2),cy.toFixed(2)].join(" ")+" c");
+    ops.push("f");
+    pdfCurPage(doc).push(ops.join(" "));
+  }
+  // `series` : [{ name, color(hex), values:[km/h,...] }] — une entrée par
+  // coureur, dans l'ordre des passages. `title` s'affiche au-dessus.
+  function pdfRegularityChart(doc, title, series){
+    series = (series||[]).filter(function(s){ return s.values && s.values.length>0; });
+    var chartW = doc.pageWidth - doc.marginX*2;
+    var chartH = 130;
+    var padL = 32, padR = 8, padT = 6, padB = 18;
+    var titleH = 16, legendH = 16, gapAfter = 14;
+    var totalH = titleH + chartH + legendH + gapAfter;
+    pdfEnsureSpace(doc, totalH);
+    pdfLine(doc, title, { bold:true, size:9.5, gap:4 });
+
+    if(series.length===0){
+      pdfLine(doc, "Le graphique apparaîtra après le premier tour chronométré.", { size:9, color:"0.55 0.58 0.52", gap:12 });
+      return;
+    }
+
+    var top = doc.y;
+    var x0 = doc.marginX;
+    var innerW = chartW - padL - padR;
+    var innerH = chartH - padT - padB;
+    var plotX0 = x0 + padL, plotY0 = top - chartH + padB; // origine (bas-gauche du tracé)
+    var maxPassages = Math.max.apply(null, series.map(function(s){ return s.values.length; }).concat([1]));
+    var allVals = series.reduce(function(a,s){ return a.concat(s.values); },[]);
+    var maxSpeed = niceMax(Math.max.apply(null, allVals.concat([1])) * 1.15);
+
+    function xPos(i){ return maxPassages<=1 ? plotX0+innerW/2 : plotX0 + (i/(maxPassages-1))*innerW; }
+    function yPos(v){ return plotY0 + (v/maxSpeed)*innerH; }
+
+    var ticks = 4;
+    for(var g=0; g<=ticks; g++){
+      var val = (maxSpeed/ticks)*g;
+      var y = yPos(val);
+      pdfSegment(doc, plotX0, y, plotX0+innerW, y, { color:PDF_GRID_RGB, width:0.75 });
+      pdfText(doc, x0, y-3, String(Math.round(val)), { size:7.5, color:PDF_AXIS_RGB });
+    }
+    pdfSegment(doc, plotX0, plotY0, plotX0+innerW, plotY0, { color:PDF_AXIS_RGB, width:1 });
+    var labelEvery = maxPassages>16 ? Math.ceil(maxPassages/16) : 1;
+    for(var p=0; p<maxPassages; p+=labelEvery){
+      pdfText(doc, xPos(p)-3, plotY0-11, String(p+1), { size:7.5, color:PDF_AXIS_RGB });
+    }
+
+    series.forEach(function(s){
+      var colorRgb = hexToPdfRgb(s.color);
+      var pts = s.values.map(function(v,i){ return [xPos(i), yPos(v)]; });
+      pdfPolyline(doc, pts, { color:colorRgb, width:1.8 });
+      pts.forEach(function(pt){ pdfDot(doc, pt[0], pt[1], 2.6, colorRgb); });
+    });
+
+    doc.y = top - chartH - 6;
+
+    // légende : un carré coloré + le prénom du coureur, par série.
+    var lx = x0;
+    series.forEach(function(s){
+      var colorRgb = hexToPdfRgb(s.color);
+      pdfCurPage(doc).push(colorRgb+" rg "+lx.toFixed(2)+" "+(doc.y-6.5).toFixed(2)+" 7 7 re f");
+      pdfText(doc, lx+11, doc.y-6, s.name, { size:8.5 });
+      lx += 11 + (s.name.length*4.9) + 16;
+    });
+    doc.y -= legendH + gapAfter - 6;
+  }
+
+  function pdfPad10(n){ var s=String(n); while(s.length<10) s="0"+s; return s; }
+  function pdfSerialize(doc){
+    var objs = [];
+    var catalogNum=1, pagesNum=2, f1Num=3, f2Num=4;
+    objs[0]=null; objs[1]=null; objs[2]=null; objs[3]=null;
+    var nextNum = 5;
+    var pageObjNums = [], contentObjNums = [];
+    doc.pages.forEach(function(ops){
+      var stream = ops.join("\n");
+      var contentNum = nextNum++;
+      objs[contentNum-1] = "<< /Length "+stream.length+" >>\nstream\n"+stream+"\nendstream";
+      var pageNum = nextNum++;
+      pageObjNums.push(pageNum);
+      contentObjNums.push(contentNum);
+    });
+    pageObjNums.forEach(function(pageNum, i){
+      objs[pageNum-1] = "<< /Type /Page /Parent "+pagesNum+" 0 R /MediaBox [0 0 "+doc.pageWidth+" "+doc.pageHeight+"] /Resources << /Font << /F1 "+f1Num+" 0 R /F2 "+f2Num+" 0 R >> >> /Contents "+contentObjNums[i]+" 0 R >>";
+    });
+    objs[catalogNum-1] = "<< /Type /Catalog /Pages "+pagesNum+" 0 R >>";
+    objs[pagesNum-1] = "<< /Type /Pages /Kids ["+pageObjNums.map(function(n){return n+" 0 R";}).join(" ")+"] /Count "+pageObjNums.length+" >>";
+    objs[f1Num-1] = "<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>";
+    objs[f2Num-1] = "<< /Type /Font /Subtype /Type1 /BaseFont /Courier-Bold /Encoding /WinAnsiEncoding >>";
+
+    var out = "%PDF-1.4\n%\xE2\xE3\xCF\xD3\n";
+    var offsets = [0];
+    for(var i=0;i<objs.length;i++){
+      offsets.push(out.length);
+      out += (i+1)+" 0 obj\n"+objs[i]+"\nendobj\n";
+    }
+    var xrefOffset = out.length;
+    out += "xref\n0 "+(objs.length+1)+"\n0000000000 65535 f \n";
+    for(var j=1;j<=objs.length;j++){ out += pdfPad10(offsets[j])+" 00000 n \n"; }
+    out += "trailer\n<< /Size "+(objs.length+1)+" /Root "+catalogNum+" 0 R >>\nstartxref\n"+xrefOffset+"\n%%EOF";
+    return out;
+  }
+
+  function buildSessionPdfBytes(session){
+    var doc = newPdfDoc();
+    pdfNewPage(doc);
+
+    pdfLine(doc, "Endurance EPS — données de séance", { bold:true, size:16, gap:14 });
+    if(session.classLabel){ pdfLine(doc, String(session.classLabel), { size:10 }); }
+    pdfLine(doc, "Séance du " + fmtDateLong(session.sessionDate), { size:10 });
+    pdfLine(doc, "Objectif : " + (session.objectiveName||""), { bold:true, size:10 });
+    pdfLine(doc, pdfEpreuveLine(session), { size:10, gap:16 });
+
+    var groupRows = sessionRowsFor(session.groups, session);
+    var groupEvalRows = evalRowsFor(session.groups, session);
+
+    session.groups.forEach(function(g, gi){
+      var relayRows = groupRows[gi] ? groupRows[gi].rows : [];
+      var evalRows = groupEvalRows[gi] ? groupEvalRows[gi].rows : [];
+      pdfEnsureSpace(doc, 40);
+      pdfLine(doc, g.name, { bold:true, size:13, gap:8 });
+      if(relayRows.length===0 && evalRows.length===0){
+        pdfLine(doc, "Aucune donnée.", { size:10, gap:16 });
+        return;
+      }
+      if(relayRows.length>0){
+        pdfTable(doc, ["Équipe","Tour","Coureur","Temps","Vitesse","Ressenti"], [9,5,14,9,13,15], relayRows, { fontSize:9 });
+        g.teams.forEach(function(team, ti){
+          if(team.kind) return;
+          var series = relayTeamSpeedSeries(team, session);
+          if(series.length===0) return;
+          var label = (team.members.length===3?"Trio ":"Duo ")+(ti+1);
+          pdfRegularityChart(doc, "Régularité par coureur — "+label+" ("+team.members.join(", ")+")", series);
+        });
+      }
+      if(evalRows.length>0){
+        pdfTable(doc, ["Épreuve","Coureur","Observateur","Passages","Résultat"], [14,14,14,10,22], evalRows, { fontSize:9 });
+        g.teams.forEach(function(team){
+          if(!team.kind) return;
+          var series = evalTeamSpeedSeries(team, session);
+          if(series.length===0) return;
+          var kindLabel = team.kind==="cooper" ? "Test 12'" : "Test 3000 m";
+          pdfRegularityChart(doc, "Régularité par coureur — "+kindLabel+" — "+(team.members[0]||""), series);
+        });
+      }
+    });
+
+    return binToUint8(pdfSerialize(doc));
+  }
+
+  function exportPdf(){
+    var sel = document.getElementById("fExportSession").value;
+    var session;
+    if(sel === "current"){ session = groupSessionSnapshot(activeGroupMeta()); }
+    else {
+      var hid = sel.split(":")[1];
+      session = historyList.find(function(h){ return h.id===hid; });
+    }
+    if(!session) return;
+
+    try{
+      var bytes = buildSessionPdfBytes(session);
+      var blob = new Blob([bytes], { type: "application/pdf" });
+      claudeSavePdf(blob, session);
+    }catch(e){
+      showToast("Erreur lors de la génération du PDF.");
+    }
+  }
+
+  function claudeSavePdf(blob, session){
+    var filename = "endurance-eps-"+(session.sessionDate||todayIso())+".pdf";
+    if(!(window.claude && window.claude.use)){
+      showToast("Export PDF indisponible dans cet aperçu.");
+      return;
+    }
+    return claude.use("downloads").then(function(downloads){
+      if(!downloads){ showToast("Export PDF indisponible ici."); return; }
+      return downloads.save({ filename: filename, data: blob }).then(function(){
+        showToast("Fichier PDF enregistré.");
+      }).catch(function(err){
+        if(err && err.code === "declined"){ return; }
+        showToast("Export annulé ou indisponible.");
+      });
+    });
+  }
+
+  // ---------- init ----------
+
+  applyTheme();
+  render();
+  initData();
+})();
+</script>
+</body>
+</html>
